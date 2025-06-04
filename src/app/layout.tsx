@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Work_Sans, Inter } from "next/font/google";
+import { Work_Sans,  Quicksand } from "next/font/google";
 import "./globals.css";
 
 const workSans = Work_Sans({
@@ -7,8 +7,9 @@ const workSans = Work_Sans({
   subsets: ["latin"],
 });
 
-const inter = Inter({
-  variable: "--font-inter",
+
+const quicksand = Quicksand({
+  variable: "--font-quicksand",
   subsets: ["latin"],
 });
 
@@ -25,7 +26,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        className={`${inter.variable} ${workSans.variable} antialiased`}
+        className={`${quicksand.variable} ${workSans.variable} antialiased`}
       >
         {children}
       </body>
