@@ -1,7 +1,6 @@
 # Tempo
 
 **Tempo** is a local-first timeboxing app that helps you start with intention, stay focused, and reflect afterward. No accounts, no cloud—just a simple, offline-friendly ritual for getting into flow.
-Starting is often the hardest part. Tempo is built to reduce friction and make it easy to begin—even when motivation is low.
 
 ## ✨ Features
 
