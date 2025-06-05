@@ -16,7 +16,7 @@ export default function Presets() {
   { title: "Quick Win", description: "15 minutes to overcome inertia", duration: 15 },
 ]
   return (
-    <div className="relative space-y-2 order-2">
+    <div className="relative space-y-2 ">
 
           <Carousel
             className="w-full"
@@ -28,12 +28,12 @@ export default function Presets() {
             <CarouselContent className="-ml-4">
               {presets.map((preset, i) => (
                 <CarouselItem key={i} className="pl-4 md:basis-1/2 lg:basis-1/3">
-                  <div className="border rounded-xl p-4 bg-muted/50 flex flex-col gap-2 h-full">
+                  <div className="border rounded-xl p-4 bg-[#cceaec] flex flex-col gap-4 h-full ">
                     <div>
-                      <h4 className="text-lg font-semibold">{preset.title}</h4>
-                      <p className="text-sm text-muted-foreground">{preset.description}</p>
-                    </div>
-                    <Button className="mt-auto w-fit self-end text-sm">Start {preset.duration} min</Button>
+                      <h4 className="text-lg font-semibold text-[#50696b]">{preset.title}</h4>
+                      <p className="text-sm text-muted-foreground ">{preset.description}</p>
+                    </div> 
+                    <Button className="text-sm bg-[#50696b] text-[#cceaec]">Start {preset.duration} min</Button>
                   </div>
                 </CarouselItem>
               ))}

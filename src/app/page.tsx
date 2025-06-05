@@ -19,12 +19,12 @@ export default function Home() {
 
   
   return (
-   <main className="bg-[#e1f5f3] min-h-screen flex flex-col items-center p-4 w-full font-body font-medium gap-4 overflow-hidden">
+   <main className="bg-[#d6fcff] min-h-screen flex flex-col items-center p-4 w-full font-body font-medium gap-4 overflow-hidden">
    
 
     <section className="max-w-7xl w-full space-y-4 lg:space-y-0 lg:flex gap-4 flex-1 flex-col">
       <div>
-        <h2 className="text-2xl font-bold tracking-tight text-slate-900 dark:text-slate-100 flex items-center gap-2">
+        <h2 className="text-2xl font-bold tracking-tight text-[#93bdc0] flex items-center gap-2">
           Tempo
         </h2>
       </div>
@@ -33,15 +33,15 @@ export default function Home() {
 
   {currentTimebox ? (
     <Timer
-  goal="Focus on your task"
-  duration={25 * 60}
+    goal={currentTimebox.goal}
+    duration={currentTimebox.duration}
     />
-  ) : <Card className="flex-1 h-full">
+  ) : <Card className="flex-1 min-h-full bg-white/70">
       <CardHeader>
         <CardTitle>Quick Start</CardTitle>
         <CardDescription>Creating a new timeblock</CardDescription>
       </CardHeader>
-      <CardContent>
+      <CardContent className="flex flex-col flex-1 ">
         <Presets/>
         <Separator className="my-6"/>
         <CreateTimeblock

@@ -19,7 +19,7 @@ import {
 
 export default function Queue() {
   return (
-    <Card className="min-h-full">
+    <Card className="min-h-full bg-white/70">
   <CardHeader>
     <CardTitle>Timeblock Queue</CardTitle>
     <CardDescription>

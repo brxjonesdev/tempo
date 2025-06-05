@@ -6,10 +6,10 @@ import { ToggleGroup, ToggleGroupItem } from "@/shared/components/ui/toggle-grou
 
 export default function CreateTimeblock({ onStart }: { onStart: (goal: string, duration: number) => void }) {
   return (
-    <section className="space-y-6">
+    <section className="space-y-6 flex-1">
     <div>
       <Label htmlFor="timeblock-name" className="font-semibold -tracking-wide">What would you like to focus on?</Label>
-      <Input id="timeblock-name" placeholder="e.g. Write a blog post" className="mt-2 w-full" />
+      <Input id="timeblock-name" placeholder="e.g. Write a blog post" className="mt-2 w-full bg-white" />
     </div>
     <div>
       <Label htmlFor="timeblock-duration" className="font-semibold -tracking-wide mt-4">How long will it take?</Label>

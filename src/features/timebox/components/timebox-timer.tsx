@@ -95,7 +95,7 @@ export default function Timer({ goal, duration }: TimerProps) {
   const isCompleted = timeLeft === 0
 
   return (
-    <div className="flex flex-col items-center justify-center p-12 bg-card rounded-3xl shadow-xl min-h-[600px]">
+    <div className="flex flex-col items-center justify-center p-12 bg-card rounded-3xl shadow-xl  min-h-full">
       {/* Goal */}
       <motion.h2
         className="text-2xl font-semibold text-gray-800 mb-10 text-center leading-relaxed"
