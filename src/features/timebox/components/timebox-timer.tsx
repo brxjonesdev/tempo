@@ -95,7 +95,7 @@ export default function Timer({ goal, duration }: TimerProps) {
   const isCompleted = timeLeft === 0
 
   return (
-    <div className="flex flex-col items-center justify-center p-12 bg-card rounded-3xl shadow-xl  min-h-full">
+    <div className="flex flex-col items-center justify-center p-12 bg-white/70 rounded-3xl shadow-xl  min-h-full">
       {/* Goal */}
       <motion.h2
         className="text-2xl font-semibold text-gray-800 mb-10 text-center leading-relaxed"
@@ -115,14 +115,14 @@ export default function Timer({ goal, duration }: TimerProps) {
         >
           <svg width="300" height="300" className="transform -rotate-90">
             {/* Background circle */}
-            <circle cx="150" cy="150" r="130" stroke="rgb(226, 232, 240)" strokeWidth="12" fill="transparent" />
+            <circle cx="150" cy="150" r="130" stroke="#cceaec" strokeWidth="12" fill="transparent" />
 
             {/* Progress circle */}
             <motion.circle
               cx="150"
               cy="150"
               r="130"
-              stroke={isCompleted ? "rgb(34, 197, 94)" : "rgb(59, 130, 246)"}
+              stroke={isCompleted ? "#50696b" : "#50696b"}
               strokeWidth="12"
               fill="transparent"
               strokeLinecap="round"
