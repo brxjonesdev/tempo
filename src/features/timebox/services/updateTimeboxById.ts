@@ -2,13 +2,10 @@ import { timeboxRepository } from "../timeboxRepo";
 import { Timebox } from "../use-timebox";
 import {ok, err, Result} from "@/lib/result";
 
-export function updateTimebox({
-    id,
-    updatedTimebox
-}: {
-    id: string;
+export function updatePersistedTimebox(
+    id: string,
     updatedTimebox: Partial<Timebox>
-}): Result<boolean, string> {
+): Result<boolean, string> {
 
     if (!id || !updatedTimebox) {
         return err("Invalid input: must provide a valid ID and updated timebox data.");

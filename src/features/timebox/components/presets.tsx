@@ -8,7 +8,7 @@ import {
   CarouselNext,
   CarouselPrevious,
 } from '@/shared/components/ui/carousel';
-import { Timebox } from '../use-timebox';
+import { Timebox } from '../hooks/use-timeboxes';
 
 type Preset = {
   title: string;

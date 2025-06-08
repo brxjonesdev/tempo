@@ -2,7 +2,7 @@
 
 import Queue from '@/features/timeline-queue/components/queue';
 import Timer from '@/features/timebox/components/timebox-timer';
-import useTimebox from '@/features/timebox/use-timebox';
+import useTimebox from '@/features/timebox/hooks/use-timeboxes';
 import {
   Card,
   CardHeader,
@@ -18,10 +18,10 @@ export default function Home() {
   const {
     currentTimebox,
     timeboxes,
-    startTimebox,
-    timeboxControls,
-    scheduleTimebox,
-    selectTimeboxFromQueue,
+    completeTimebox,
+    reset,
+    selectTimebox,
+    persistTimebox,
   } = useTimebox();
 
   return (
@@ -37,8 +37,8 @@ export default function Home() {
               <Timer
                 goal={currentTimebox.goal}
                 duration={currentTimebox.duration}
-                onComplete={() => timeboxControls('complete')}
-                onReset={() => timeboxControls('reset')}
+                onComplete={() => completeTimebox(currentTimebox.id)}
+                onReset={() => reset()}
               />
             ) : (
               <Card className="flex flex-col flex-1 bg-white/70 overflow-hidden">
@@ -49,20 +49,19 @@ export default function Home() {
                   </CardDescription>
                 </CardHeader>
                 <CardContent className="flex flex-col flex-1 overflow-y-auto">
-                  <Presets onSelect={startTimebox} />
+                  <Presets onSelect={selectTimebox} />
                   <Separator className="my-6" />
                   <CreateTimeblock
                     onQuickStart={(goal: string, duration: number) => {
-                      startTimebox({
-                        id: Date.now().toString(),
-                        goal,
-                        duration,
-                        isCompleted: false,
-                        isActive: false,
-                      });
+                      const result = persistTimebox(goal, duration);
+                      if (!result.ok) {
+                        alert(result.error);
+                      } else {
+                        selectTimebox(result.data);
+                      }                      
                     }}
                     onSchedule={(goal, duration) => {
-                      scheduleTimebox(goal, duration);
+                      persistTimebox(goal, duration);
                     }}
                   />
                 </CardContent>
@@ -72,7 +71,7 @@ export default function Home() {
           <div className="flex flex-col flex-1 min-h-0 col-span-2">
             <Queue 
             timeboxes={timeboxes} 
-            onSelectTimebox={selectTimeboxFromQueue} />
+            onSelectTimebox={selectTimebox} />
           </div>
         </section>
       </div>
