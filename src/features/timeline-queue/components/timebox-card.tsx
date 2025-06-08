@@ -15,6 +15,7 @@ export type TimeboxCardProps = {
   isActive: boolean
   isCompleted?: boolean // optional for future use
   postBoxReview?: string
+  onSelect?: () => void // callback for when card is selected
 }
 
 export default function TimeboxCard({
@@ -25,6 +26,7 @@ export default function TimeboxCard({
   isActive,
   isCompleted = false,
   postBoxReview,
+  onSelect = () => {}
 }: TimeboxCardProps) {
   const [showReviewHover, setShowReviewHover] = useState(false)
 
@@ -62,6 +64,7 @@ export default function TimeboxCard({
       className={`w-full  transition-all duration-200 hover:shadow-lg ${
         isActive ? "ring-2 ring-blue-500 shadow-md" : ""
       } ${isCompleted ? "bg-green-50 border-green-200" : ""}`}
+  onClick={onSelect}
     >
       <CardHeader className="pb-3">
         <div className="flex items-start justify-between">

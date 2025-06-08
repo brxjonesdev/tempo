@@ -27,7 +27,13 @@ export default function Home() {
           )}
           </div>
           <div className="flex flex-col flex-1 min-h-0 col-span-2">
-            <Queue />
+            <Queue
+            timeboxes={[
+              
+              ]}
+            onSelectTimebox={() => {}}
+            
+            />
           </div>
           
         </section>
