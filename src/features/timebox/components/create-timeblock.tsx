@@ -18,14 +18,12 @@ export default function CreateTimeblock({
 
 
   function handleQuickStart() {
-    console.log('Quick Start clicked', goal, selectedTime);
   const totalDuration = selectedTime.hours * 60 + selectedTime.minutes;
-  //   if (goal.trim() && totalDuration > 0) {
-  //     onQuickStart(goal.trim(), totalDuration * 60); // convert to seconds
-  //     setGoal('');
-  //     setSelectedTime({ hours: 1, minutes: 30 }); // reset to default
-  //   }
-  console.log('Quick Start called with goal:', goal.trim(), 'duration:', totalDuration * 60, 'seconds' + totalDuration);
+    if (goal.trim() && totalDuration > 0) {
+      onQuickStart(goal.trim(), totalDuration * 60); // convert to seconds
+      setGoal('');
+      setSelectedTime({ hours: 1, minutes: 30 }); // reset to default
+    }
   }
 
   function handleScheduleLater() {

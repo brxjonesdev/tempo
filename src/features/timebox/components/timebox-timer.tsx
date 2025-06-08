@@ -18,15 +18,22 @@ export default function Timer({
   onComplete,
   onReset,
 }: TimerProps) {
-  console.log('Timer rendered with goal:', goal, 'and duration:', duration);
   const [timeLeft, setTimeLeft] = useState(duration);
   const [isRunning, setIsRunning] = useState(false);
   const [intervalId, setIntervalId] = useState<NodeJS.Timeout | null>(null);
+
 
   // Calculate progress percentage
   const progress = ((duration - timeLeft) / duration) * 100;
   const circumference = 2 * Math.PI * 130; // radius of 130
   const strokeDashoffset = circumference - (progress / 100) * circumference;
+
+
+
+  // update time left when duration changes
+  useEffect(() => {
+    setTimeLeft(duration);
+  }, [duration]);
 
   // Format time as MM:SS
   const formatTime = (seconds: number) => {
@@ -34,6 +41,8 @@ export default function Timer({
     const secs = seconds % 60;
     return `${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
   };
+  
+
 
   // Start timer
   const startTimer = () => {

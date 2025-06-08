@@ -51,9 +51,10 @@ export default function Queue({
           <TimeboxCard
             key={index}
             {...timebox}
-            onSelect={() => onSelectTimebox({
-              
-            })}
+            onSelect={() => {
+              console.log('Selected timebox:', timebox);
+              onSelectTimebox(timebox);
+            }}
           />
         ))}
         {timeboxes.length === 0 && (
