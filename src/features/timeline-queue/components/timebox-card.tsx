@@ -6,17 +6,8 @@ import { Badge } from "@/shared/components/ui/badge"
 import { Button } from "@/shared/components/ui/button"
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/shared/components/ui/dialog"
 import { Clock, Target, Calendar, Star, MessageSquare } from "lucide-react"
+import { Timebox } from "@/features/timebox/use-timebox"
 
-export type TimeboxCardProps = {
-  goal: string
-  duration: number // in seconds
-  completionDate: Date | null
-  priority: number // 1-5 scale
-  isActive: boolean
-  isCompleted?: boolean // optional for future use
-  postBoxReview?: string
-  onSelect?: () => void // callback for when card is selected
-}
 
 export default function TimeboxCard({
   goal,
@@ -26,8 +17,8 @@ export default function TimeboxCard({
   isActive,
   isCompleted = false,
   postBoxReview,
-  onSelect = () => {}
-}: TimeboxCardProps) {
+  onSelect,
+}: Timebox) {
   const [showReviewHover, setShowReviewHover] = useState(false)
 
   // Format duration from seconds to readable format
@@ -64,7 +55,7 @@ export default function TimeboxCard({
       className={`w-full  transition-all duration-200 hover:shadow-lg ${
         isActive ? "ring-2 ring-blue-500 shadow-md" : ""
       } ${isCompleted ? "bg-green-50 border-green-200" : ""}`}
-  onClick={onSelect}
+      
     >
       <CardHeader className="pb-3">
         <div className="flex items-start justify-between">

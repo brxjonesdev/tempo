@@ -8,9 +8,14 @@ import { Button } from '@/shared/components/ui/button';
 type TimerProps = {
   goal: string;
   duration: number; // duration in seconds
+  onComplete?: () => void; // callback for completion
+  onPause?: () => void; // callback for pause
+  onResume?: () => void; // callback for resume
+  onStart?: () => void; // callback for start
+  onReset?: () => void; // callback for reset
 };
 
-export default function Timer({ goal, duration }: TimerProps) {
+export default function Timer({ goal, duration, onComplete, onPause, onResume, onStart, onReset }: TimerProps) {
   const [timeLeft, setTimeLeft] = useState(duration);
   const [isRunning, setIsRunning] = useState(false);
   const [intervalId, setIntervalId] = useState<NodeJS.Timeout | null>(null);
@@ -96,6 +101,7 @@ export default function Timer({ goal, duration }: TimerProps) {
 
   return (
     <div className="flex flex-col items-center justify-center p-12 bg-white/70 rounded-3xl shadow-xl  min-h-full">
+    
       {/* Goal */}
       <motion.h2
         className="text-2xl font-semibold text-gray-800 mb-10 text-center leading-relaxed"
@@ -222,17 +228,14 @@ export default function Timer({ goal, duration }: TimerProps) {
         </Button>
       </div>
 
-      {/* Status indicator */}
-      <div className="flex items-center gap-3">
-        <motion.div
-          className={`w-3 h-3 rounded-full ${isRunning ? 'bg-green-500' : isCompleted ? 'bg-blue-500' : 'bg-gray-400'}`}
-          animate={isRunning ? { scale: [1, 1.2, 1] } : { scale: 1 }}
-          transition={{ duration: 1, repeat: isRunning ? Number.POSITIVE_INFINITY : 0 }}
-        />
-        <span className="text-sm text-gray-600 font-medium">
-          {isRunning ? 'Running' : isCompleted ? 'Completed' : 'Paused'}
-        </span>
-      </div>
+     
+      <motion.div
+            whileTap={{ scale: 0.9 }}
+            onClick={onReset}
+            className="text-sm text-gray-600 font-medium hover:underline cursor-pointer mb-4 transition-colors duration-200 mt-3"
+          >
+            Clear Timebox
+          </motion.div>
     </div>
   );
 }

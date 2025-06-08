@@ -8,8 +8,17 @@ import {
   CarouselNext,
   CarouselPrevious,
 } from '@/shared/components/ui/carousel';
+import { Timebox } from '../use-timebox';
 
-export default function Presets() {
+type Preset = {
+  title: string;
+  description: string;
+  blurb: string;
+  duration: number; // in minutes
+}
+
+
+export default function Presets({onSelect}: { onSelect: (timebox: Timebox) => void }) {
   const presets = [
     {
       title: 'Pomodoro',
@@ -73,6 +82,22 @@ export default function Presets() {
     },
   ];
 
+  function handlePresetSelect(preset: Preset){
+  // convert preset to Timebox format
+  const presetTimebox: Timebox = {
+    id: (Math.random() * 10000).toString(), // simple random ID for demo
+    goal: preset.title,
+    duration: preset.duration * 60, // convert minutes to seconds
+    completionDate: null,
+    priority: 3, // default priority
+    isActive: true, // set as active for demo
+  };
+
+    onSelect(presetTimebox);
+  
+  
+  }
+
   return (
     <div className="relative space-y-2 ">
       <Carousel
@@ -92,7 +117,9 @@ export default function Presets() {
                 <div>
                   <p className="text-sm text-[#50696b] hidden lg:block font-heading font-normal">{preset.blurb}</p>
                 </div>
-                <Button className="text-sm bg-[#50696b] text-[#cceaec]">
+                <Button className="text-sm bg-[#50696b] text-[#cceaec]"
+                  onClick={() => handlePresetSelect(preset)}
+                >
                   Start {preset.duration} min
                 </Button>
               </div>
