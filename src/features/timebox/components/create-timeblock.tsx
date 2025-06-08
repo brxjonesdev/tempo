@@ -7,14 +7,11 @@ import { Minus, Plus } from 'lucide-react';
 import { useState } from 'react';
 
 export default function CreateTimeblock() {
-
   const [selectedTime, setSelectedTime] = useState({ hours: 1, minutes: 30 })
-
-
   return (
-    <section className="space-y-6 flex-1 flex flex-col">
+    <section className="space-y-6 flex-1 flex flex-col font-heading font-normal">
       <div className='space-y-3'>
-        <Label htmlFor="timeblock-name" className="font-semibold -tracking-wide">
+        <Label htmlFor="timeblock-name" className="-tracking-wide">
           What would you like to focus on?
         </Label>
         <Input
@@ -24,7 +21,7 @@ export default function CreateTimeblock() {
         />
       </div>
       <div className='space-y-3'>
-        <Label htmlFor="timeblock-duration" className="font-semibold -tracking-wide mt-4">
+        <Label htmlFor="timeblock-duration" className=" -tracking-wide mt-4">
           How long will it take?
         </Label>
         <CardContent>

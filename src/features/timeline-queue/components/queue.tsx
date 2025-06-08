@@ -19,44 +19,14 @@ import TimeboxCard, { TimeboxCardProps } from './timebox-card';
 
 export default function Queue() {
   const timeblocks: TimeboxCardProps[] = [
-    {
-      goal: "Write blog post about React patterns",
-      duration: 3600,
-      completionDate: null,
-      priority: 3,
-      isActive: true,
-    },
-    {
-      goal: "Implement authentication flow",
-      duration: 5400,
-      completionDate: new Date("2025-06-04T16:30:00Z"),
-      priority: 5,
-      isActive: false,
-      isCompleted: true,
-      postBoxReview: "Flow is smooth, just needs tests and cleanup.",
-    },
-    {
-      goal: "Design dashboard UI",
-      duration: 2700,
-      completionDate: null,
-      priority: 2,
-      isActive: false,
-    },
-    {
-      goal: "Fix bug in timepicker component",
-      duration: 1800,
-      completionDate: new Date("2025-06-03T10:00:00Z"),
-      priority: 4,
-      isActive: false,
-      isCompleted: true,
-    },
+  
   ];
 
   return (
-   <Card className="flex flex-col flex-1 bg-white/70 overflow-hidden">
+   <Card className="flex flex-col flex-1 bg-white/70 overflow-hidden ">
       <CardHeader>
         <CardTitle>Timeblock Queue</CardTitle>
-        <CardDescription>Upcoming timeblocks will appear here.</CardDescription>
+        <CardDescription className='font-heading font-normal'>Upcoming timeblocks will appear here.</CardDescription>
         <CardAction>
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
@@ -71,14 +41,18 @@ export default function Queue() {
         </CardAction>
       </CardHeader>
 
-      <CardContent className="overflow-y-scroll p-4 space-y-4">
-
-
+      <CardContent className="overflow-y-scroll p-4 space-y-4 flex-1 flex flex-col">
         {timeblocks
         .splice(0, 4) // Limit to 5 for display
         .map((timeblock, index) => (
           <TimeboxCard key={index} {...timeblock} />
         ))}
+        { timeblocks.length === 0 && (
+          <div className="text-center text-gray-500 flex-1 flex flex-col justify-center items-center text-lg font-heading font-normal">
+            <p>No upcoming timeblocks.</p>
+            <p>Start a new timebox to add to the queue!</p>
+          </div>
+        )}
       </CardContent>
     </Card>
   );

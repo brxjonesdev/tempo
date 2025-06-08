@@ -9,7 +9,7 @@ export default function QuickStart() {
     <Card className="flex flex-col flex-1 bg-white/70 overflow-hidden">
                   <CardHeader>
                     <CardTitle>Quick Start</CardTitle>
-                    <CardDescription>Creating a new timeblock</CardDescription>
+                    <CardDescription className='font-heading font-normal'>Creating a new timeblock</CardDescription>
                   </CardHeader>
                   <CardContent className="flex flex-col flex-1 overflow-y-auto">
                     <Presets />

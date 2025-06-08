@@ -90,7 +90,7 @@ export default function Presets() {
                   <p className="text-sm text-muted-foreground">{preset.description}</p>
                 </div>
                 <div>
-                  <p className="text-sm text-[#50696b] hidden lg:block">{preset.blurb}</p>
+                  <p className="text-sm text-[#50696b] hidden lg:block font-heading font-normal">{preset.blurb}</p>
                 </div>
                 <Button className="text-sm bg-[#50696b] text-[#cceaec]">
                   Start {preset.duration} min
