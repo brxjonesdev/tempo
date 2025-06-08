@@ -1,49 +1,85 @@
-import React from 'react'
-import { Button } from "@/shared/components/ui/button";
+import React from 'react';
+import { Button } from '@/shared/components/ui/button';
 import {
   Card,
   CardAction,
   CardContent,
   CardDescription,
- 
   CardHeader,
   CardTitle,
-} from "@/shared/components/ui/card"
+} from '@/shared/components/ui/card';
 
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
-} from "@/shared/components/ui/dropdown-menu"
+} from '@/shared/components/ui/dropdown-menu';
+import TimeboxCard, { TimeboxCardProps } from './timebox-card';
 
 export default function Queue() {
-  return (
-    <Card className="min-h-full bg-white/70">
-  <CardHeader>
-    <CardTitle>Timeblock Queue</CardTitle>
-    <CardDescription>
-      Upcoming timeblocks will appear here.
-    </CardDescription>
-    <CardAction>
-      <DropdownMenu>
-  <DropdownMenuTrigger asChild>
-    <Button variant={"outline"}>
-      Sort
-    </Button>
-  </DropdownMenuTrigger>
-  <DropdownMenuContent className="font-heading">
-    <DropdownMenuItem>Completed</DropdownMenuItem>
-    <DropdownMenuItem>In Progress</DropdownMenuItem>
-    <DropdownMenuItem>Upcoming</DropdownMenuItem>
-  </DropdownMenuContent>
-</DropdownMenu>
-    </CardAction>
-  </CardHeader>
-  <CardContent className="flex-1 bg-black/5">
-   
-  </CardContent>
+  const timeblocks: TimeboxCardProps[] = [
+    {
+      goal: "Write blog post about React patterns",
+      duration: 3600,
+      completionDate: null,
+      priority: 3,
+      isActive: true,
+    },
+    {
+      goal: "Implement authentication flow",
+      duration: 5400,
+      completionDate: new Date("2025-06-04T16:30:00Z"),
+      priority: 5,
+      isActive: false,
+      isCompleted: true,
+      postBoxReview: "Flow is smooth, just needs tests and cleanup.",
+    },
+    {
+      goal: "Design dashboard UI",
+      duration: 2700,
+      completionDate: null,
+      priority: 2,
+      isActive: false,
+    },
+    {
+      goal: "Fix bug in timepicker component",
+      duration: 1800,
+      completionDate: new Date("2025-06-03T10:00:00Z"),
+      priority: 4,
+      isActive: false,
+      isCompleted: true,
+    },
+  ];
 
-      </Card>
-  )
+  return (
+   <Card className="flex flex-col flex-1 bg-white/70 overflow-hidden">
+      <CardHeader>
+        <CardTitle>Timeblock Queue</CardTitle>
+        <CardDescription>Upcoming timeblocks will appear here.</CardDescription>
+        <CardAction>
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button variant="outline">Sort</Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent className="font-heading">
+              <DropdownMenuItem>Completed</DropdownMenuItem>
+              <DropdownMenuItem>In Progress</DropdownMenuItem>
+              <DropdownMenuItem>Upcoming</DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
+        </CardAction>
+      </CardHeader>
+
+      <CardContent className="overflow-y-scroll p-4 space-y-4">
+
+
+        {timeblocks
+        .splice(0, 4) // Limit to 5 for display
+        .map((timeblock, index) => (
+          <TimeboxCard key={index} {...timeblock} />
+        ))}
+      </CardContent>
+    </Card>
+  );
 }
