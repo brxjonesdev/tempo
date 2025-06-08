@@ -6,40 +6,38 @@ export type Timebox = {
   id: string;
   goal: string;
   duration: number; // in seconds
-  completionDate: Date | null;
-  priority: number; // 1-5 scale
   isActive: boolean;
-  isCompleted?: boolean; // optional for future use
-  postBoxReview?: string; // optional for future use
-  onSelect?: (timebox: Timebox) => void; // callback for selection
+  isCompleted: boolean;
+  postBoxReview?: string;
+  onSelect?: (timebox: Timebox) => void;
 };
+
 export default function useTimebox() {
   const [timeboxes, setTimeboxes] = useState<Timebox[]>([
     {
       id: '1',
       goal: 'Complete project report',
-      duration: 3600, // 1 hour
-      completionDate: null,
-      priority: 3,
+      duration: 3600,
+      isCompleted: true,
       isActive: false,
+      postBoxReview: "meow meow meow",
     },
     {
       id: '2',
       goal: 'Study for exams',
-      duration: 7200, // 2 hours
-      completionDate: null,
-      priority: 4,
+      duration: 7200,
+      isCompleted: false,
       isActive: false,
     },
     {
       id: '3',
       goal: 'Exercise',
-      duration: 1800, // 30 minutes
-      completionDate: null,
-      priority: 2,
+      duration: 1800,
+      isCompleted: false,
       isActive: false,
     },
   ]);
+
   const [currentTimebox, setCurrentTimebox] = useState<Timebox | null>(null);
 
   function scheduleTimebox(goal: string, duration: number) {
@@ -47,20 +45,14 @@ export default function useTimebox() {
       id: Date.now().toString(),
       goal,
       duration,
-      completionDate: null,
-      priority: 3, // default priority
+      isCompleted: false,
       isActive: false,
     };
-
     setTimeboxes((prev) => [...prev, newTimebox]);
   }
 
   function startTimebox(timebox: Timebox) {
-    setCurrentTimebox({
-      ...timebox,
-      isActive: true,
-    });
-  
+    selectTimeboxFromQueue(timebox);
   }
 
   function timeboxControls(intent: string) {
@@ -75,19 +67,32 @@ export default function useTimebox() {
         break;
       case 'reset':
         setCurrentTimebox(null);
-        break;
-      default:
+        setTimeboxes((prev) =>
+          prev.map((tb) => ({ ...tb, isActive: false }))
+        );
         break;
     }
   }
 
+  function selectTimeboxFromQueue(timebox: Timebox) {
+    console.log('Selected timebox:', timebox);
+    setCurrentTimebox({ ...timebox, isActive: true });
+    setTimeboxes((prev) =>
+      prev.map((tb) =>
+        tb.id === timebox.id
+          ? { ...tb, isActive: true }
+          : { ...tb, isActive: false }
+      )
+    );
+  }
+
   return {
     currentTimebox,
-    timeboxes,
-    setTimeboxes,
     scheduleTimebox,
+    selectTimeboxFromQueue,
+    setTimeboxes,
     startTimebox,
     timeboxControls,
-    setCurrentTimebox,
+    timeboxes,
   };
 }

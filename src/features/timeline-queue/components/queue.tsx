@@ -52,7 +52,6 @@ export default function Queue({
             key={index}
             {...timebox}
             onSelect={() => {
-              console.log('Selected timebox:', timebox);
               onSelectTimebox(timebox);
             }}
           />

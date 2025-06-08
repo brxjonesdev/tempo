@@ -1,19 +1,24 @@
-'use client';
+"use client"
 
-import { useState } from 'react';
-import { Card, CardContent, CardHeader, CardTitle } from '@/shared/components/ui/card';
-import { Badge } from '@/shared/components/ui/badge';
-import { Button } from '@/shared/components/ui/button';
-import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from '@/shared/components/ui/dialog';
-import { Clock, Target, Calendar, Star, MessageSquare } from 'lucide-react';
-import { Timebox } from '@/features/timebox/use-timebox';
-import { on } from 'events';
+import { useState } from "react"
+import { Card, CardContent, CardHeader, CardTitle } from "@/shared/components/ui/card"
+import { Badge } from "@/shared/components/ui/badge"
+import { Button } from "@/shared/components/ui/button"
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/shared/components/ui/dialog"
+import { Clock, MessageSquare, CheckCircle2, Play, Target } from "lucide-react"
+
+// Assuming this is your Timebox type
+type Timebox = {
+  goal: string
+  duration: number
+  isActive: boolean
+  isCompleted: boolean
+  postBoxReview?: string
+}
+
+type TimeboxCardProps = Timebox & {
+  onSelect?: (timebox: Timebox) => void
+}
 
 export default function TimeboxCard({
   goal,
@@ -22,91 +27,159 @@ export default function TimeboxCard({
   isCompleted,
   postBoxReview,
   onSelect,
-}: Timebox) {
-  const [showReviewHover, setShowReviewHover] = useState(false);
+}: TimeboxCardProps) {
+  const [showReviewHover, setShowReviewHover] = useState(false)
+  const [isHovered, setIsHovered] = useState(false)
 
   // Format duration from seconds to readable format
   const formatDuration = (seconds: number) => {
-    const hours = Math.floor(seconds / 3600);
-    const minutes = Math.floor((seconds % 3600) / 60);
-    const remainingSeconds = seconds % 60;
+    const hours = Math.floor(seconds / 3600)
+    const minutes = Math.floor((seconds % 3600) / 60)
+    const remainingSeconds = seconds % 60
 
     if (hours > 0) {
-      return `${hours}h ${minutes}m ${remainingSeconds}s`;
+      return `${hours}h ${minutes}m`
     } else if (minutes > 0) {
-      return `${minutes}m ${remainingSeconds}s`;
+      return `${minutes}m ${remainingSeconds}s`
     } else {
-      return `${remainingSeconds}s`;
+      return `${remainingSeconds}s`
     }
-  };
-
-  function handleSelect() {
-    onSelect(
-    
-    );
   }
 
+  const handleCardClick = () => {
+    if (onSelect) {
+      onSelect({
+        goal,
+        duration,
+        isActive,
+        isCompleted,
+        postBoxReview,
+      })
+    }
+  }
+
+  const getCardStyles = () => {
+    let baseStyles = "w-full transition-all duration-300 cursor-pointer group relative overflow-hidden"
+
+    if (isActive) {
+      baseStyles += " ring-2 ring-blue-500 shadow-lg bg-blue-50/50 border-blue-200"
+    } else if (isCompleted) {
+      baseStyles += " bg-gradient-to-br from-green-50 to-emerald-50 border-green-200 shadow-sm"
+    } else {
+      baseStyles += " hover:shadow-md hover:border-gray-300"
+    }
+
+    if (isHovered && onSelect) {
+      baseStyles += " scale-[1.02] shadow-lg"
+    }
+
+    return baseStyles
+  }
+
+  const getStatusIcon = () => {
+    if (isCompleted) return <CheckCircle2 className="w-4 h-4 text-green-600" />
+    if (isActive) return <Play className="w-4 h-4 text-blue-600" />
+    return <Target className="w-4 h-4 text-gray-500" />
+  }
+
+  const getStatusBadge = () => {
+    if (isActive) {
+      return (
+        <Badge className="bg-blue-500 hover:bg-blue-600 text-white shadow-sm">
+          <Play className="w-3 h-3 mr-1" />
+          Active
+        </Badge>
+      )
+    }
+    if (isCompleted) {
+      return (
+        <Badge className="bg-green-500 hover:bg-green-600 text-white shadow-sm">
+          <CheckCircle2 className="w-3 h-3 mr-1" />
+          Completed
+        </Badge>
+      )
+    }
+    return null
+  }
 
   return (
     <Card
-      className={`w-full  transition-all duration-200 hover:shadow-lg ${
-        isActive ? 'ring-2 ring-blue-500 shadow-md' : ''
-      } ${isCompleted ? 'bg-green-50 border-green-200' : ''}`}
-      onClick={onSelect}
+      className={getCardStyles()}
+      onClick={handleCardClick}
+      onMouseEnter={() => setIsHovered(true)}
+      onMouseLeave={() => setIsHovered(false)}
+      role={onSelect ? "button" : undefined}
+      tabIndex={onSelect ? 0 : undefined}
+      onKeyDown={(e) => {
+        if (onSelect && (e.key === "Enter" || e.key === " ")) {
+          e.preventDefault()
+          handleCardClick()
+        }
+      }}
     >
-      <CardHeader className="pb-3">
-        <div className="flex items-start justify-between">
-          <CardTitle className="text-lg font-semibold line-clamp-2 flex-1">
-            {goal}
-          </CardTitle>
-          <div className="flex flex-col gap-2 ml-3">
-            {isActive && (
-              <Badge variant="default" className="bg-blue-500 hover:bg-blue-600">
-                Active
-              </Badge>
-            )}
-            {isCompleted && (
-              <Badge variant="default" className="bg-green-500 hover:bg-green-600">
-                Completed
-              </Badge>
-            )}
+      {/* Subtle background pattern for active/completed states */}
+      {(isActive || isCompleted) && (
+        <div className="absolute inset-0 opacity-5">
+          <div className="absolute inset-0 bg-gradient-to-br from-transparent via-white to-transparent" />
+        </div>
+      )}
+
+      <CardHeader className="pb-4 relative">
+        <div className="flex items-start justify-between gap-3">
+          <div className="flex items-start gap-3 flex-1 min-w-0">
+            <div className="mt-1 flex-shrink-0">{getStatusIcon()}</div>
+            <CardTitle className="text-lg font-semibold leading-tight line-clamp-2 text-gray-900 group-hover:text-gray-700 transition-colors">
+              {goal}
+            </CardTitle>
           </div>
+          <div className="flex-shrink-0">{getStatusBadge()}</div>
         </div>
       </CardHeader>
 
-      <CardContent className="space-y-4">
+      <CardContent className="space-y-4 relative">
         {/* Duration */}
-        <div className="flex items-center gap-2 text-sm text-muted-foreground">
-          <Clock className="w-4 h-4" />
-          <span>{formatDuration(duration)}</span>
+        <div className="flex items-center gap-2 text-sm text-gray-600">
+          <div className="flex items-center gap-2 bg-gray-50 rounded-full px-3 py-1.5">
+            <Clock className="w-4 h-4 text-gray-500" />
+            <span className="font-medium">{formatDuration(duration)}</span>
+          </div>
         </div>
 
-        
-
-        {/* Post-box Review (only for completed timeboxes) */}
+        {/* Post-box Review Section */}
         {isCompleted && postBoxReview && (
-          <div className="pt-2 border-t">
-            <div className="flex items-center justify-between">
-              <span className="text-sm font-medium text-muted-foreground flex items-center gap-2">
-                <MessageSquare className="w-4 h-4" />
+          <div className="pt-3 border-t border-gray-100">
+            <div className="flex items-center justify-between mb-3">
+              <div className="flex items-center gap-2 text-sm font-medium text-gray-700">
+                <MessageSquare className="w-4 h-4 text-green-600" />
                 Review Available
-              </span>
+              </div>
 
-              {/* Modal Trigger */}
               <Dialog>
                 <DialogTrigger asChild>
-                  <Button variant="outline" size="sm">
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    className="hover:bg-green-50 hover:border-green-300 transition-colors"
+                    onClick={(e) => e.stopPropagation()}
+                  >
                     View Review
                   </Button>
                 </DialogTrigger>
-                <DialogContent className="max-w-md">
+                <DialogContent className="max-w-lg">
                   <DialogHeader>
-                    <DialogTitle>Post-box Review</DialogTitle>
+                    <DialogTitle className="flex items-center gap-2">
+                      <MessageSquare className="w-5 h-5 text-green-600" />
+                      Post-box Review
+                    </DialogTitle>
                   </DialogHeader>
-                  <div className="mt-4">
-                    <p className="text-sm text-muted-foreground mb-2">Goal: {goal}</p>
-                    <div className="bg-muted p-4 rounded-lg">
-                      <p className="text-sm leading-relaxed">{postBoxReview}</p>
+                  <div className="mt-4 space-y-4">
+                    <div className="bg-gray-50 p-3 rounded-lg">
+                      <p className="text-sm text-gray-600 mb-1">Goal:</p>
+                      <p className="font-medium text-gray-900">{goal}</p>
+                    </div>
+                    <div className="bg-green-50 border border-green-200 p-4 rounded-lg">
+                      <p className="text-sm text-gray-600 mb-2">Review:</p>
+                      <p className="text-sm leading-relaxed text-gray-800">{postBoxReview}</p>
                     </div>
                   </div>
                 </DialogContent>
@@ -115,26 +188,31 @@ export default function TimeboxCard({
 
             {/* Hover Preview */}
             <div
-              className="relative mt-2"
+              className="relative"
               onMouseEnter={() => setShowReviewHover(true)}
               onMouseLeave={() => setShowReviewHover(false)}
             >
-              <div className="text-xs text-muted-foreground cursor-help border-b border-dotted border-muted-foreground inline-block">
+              <div className="text-xs text-gray-500 cursor-help border-b border-dotted border-gray-400 inline-block hover:text-gray-700 transition-colors">
                 Hover for preview
               </div>
 
               {showReviewHover && (
-                <div className="absolute z-10 mt-2 p-3 bg-popover border rounded-lg shadow-lg max-w-xs">
-                  <p className="text-sm line-clamp-3">{postBoxReview}</p>
-                  <p className="text-xs text-muted-foreground mt-2">
-                    Click &quot;View Review&quot; for full text
-                  </p>
+                <div className="absolute z-20 mt-2 p-4 bg-white border border-gray-200 rounded-lg shadow-xl max-w-xs left-0 animate-in fade-in-0 zoom-in-95 duration-200">
+                  <p className="text-sm line-clamp-3 text-gray-700 mb-2">{postBoxReview}</p>
+                  <p className="text-xs text-gray-500">Click &ldquo;View Review&quot; for full text</p>
+                  <div className="absolute -top-1 left-4 w-2 h-2 bg-white border-l border-t border-gray-200 rotate-45" />
                 </div>
               )}
             </div>
           </div>
         )}
+
+        {/* Selection indicator */}
+        {onSelect && (
+          <div className="absolute bottom-2 right-2 opacity-0 group-hover:opacity-100 transition-opacity duration-200">
+            <div className="w-2 h-2 bg-blue-500 rounded-full" />
+          </div>
+        )}
       </CardContent>
     </Card>
-  );
-}
+  )}

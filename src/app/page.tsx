@@ -21,7 +21,7 @@ export default function Home() {
     startTimebox,
     timeboxControls,
     scheduleTimebox,
-    setCurrentTimebox,
+    selectTimeboxFromQueue,
   } = useTimebox();
 
   return (
@@ -73,7 +73,7 @@ export default function Home() {
           <div className="flex flex-col flex-1 min-h-0 col-span-2">
             <Queue
               timeboxes={timeboxes}
-              onSelectTimebox={setCurrentTimebox}
+              onSelectTimebox={selectTimeboxFromQueue}
             />
           </div>
         </section>
