@@ -1,6 +1,11 @@
 'use client';
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
+import { updateTimebox } from './services/updateTimeboxById';
+import { err } from '@/lib/result';
+import { deleteTimeboxByID } from './services/deleteTimeboxByID';
+import { addTimeboxToQueue } from './services/addTimeboxToQueue';
+import { fetchTimeboxesFromDB } from './services/fetchTimeboxes';
 
 export type Timebox = {
   id: string;
@@ -14,9 +19,30 @@ export type Timebox = {
 
 export default function useTimebox() {
   const [timeboxes, setTimeboxes] = useState<Timebox[]>([]);
-
   const [currentTimebox, setCurrentTimebox] = useState<Timebox | null>(null);
 
+  useEffect(() => {
+  async function loadTimeboxes() {
+      const result = fetchTimeboxes();
+      if (!result.ok) {
+        console.error("Failed to load timeboxes:", result.error);
+        return;
+      }
+      setTimeboxes(result.data);
+}
+    loadTimeboxes();
+    return () => {
+      setCurrentTimebox(null);
+    };
+  }, []);
+
+  function fetchTimeboxes(){
+    const result = fetchTimeboxesFromDB()
+    if (!result.ok) {
+      return err(result.error);
+    }
+    return result;
+  }
   function scheduleTimebox(goal: string, duration: number) {
     const newTimebox: Timebox = {
       id: Date.now().toString(),
@@ -26,6 +52,11 @@ export default function useTimebox() {
       isActive: false,
     };
     setTimeboxes((prev) => [...prev, newTimebox]);
+    const response = addTimeboxToQueue(newTimebox);
+    if (!response.ok) {
+      setTimeboxes((prev) => prev.filter((tb) => tb.id !== newTimebox.id));
+      return err(response.error);
+    }
   }
 
   function startTimebox(timebox: Timebox) {
@@ -59,6 +90,35 @@ export default function useTimebox() {
     );
   }
 
+  function updateTimeboxById(timeboxId: string, updatedTimebox: Partial<Timebox>) {
+    setTimeboxes((prev) =>
+      prev.map((tb) => (tb.id === timeboxId ? { ...tb, ...updatedTimebox } : tb)),
+    );
+    const response = updateTimebox({
+      id: timeboxId,
+      updatedTimebox,
+    })
+    if (!response.ok) {
+      // revert the state if update fails
+      setTimeboxes((prev) =>
+        prev.map((tb) => (tb.id === timeboxId ? { ...tb, ...updatedTimebox } : tb)),
+      );
+      return err(response.error);
+    }
+  }
+
+  function deleteTimebox(timeboxId: string) {
+    const timeboxToDelete = timeboxes.find((tb) => tb.id === timeboxId);
+    if (!timeboxToDelete) return err("Timebox not found");
+
+    setTimeboxes((prev) => prev.filter((tb) => tb.id !== timeboxId));
+    const response = deleteTimeboxByID(timeboxId);
+    if (!response.ok) {
+      setTimeboxes((prev) => [...prev, timeboxToDelete]);
+      return err(response.error);
+    }
+  }
+
   return {
     currentTimebox,
     scheduleTimebox,
@@ -67,5 +127,7 @@ export default function useTimebox() {
     startTimebox,
     timeboxControls,
     timeboxes,
+    updateTimeboxById,
+    deleteTimebox,
   };
 }
