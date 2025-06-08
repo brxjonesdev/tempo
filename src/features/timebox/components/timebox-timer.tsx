@@ -9,13 +9,16 @@ type TimerProps = {
   goal: string;
   duration: number; // duration in seconds
   onComplete?: () => void; // callback for completion
-  onPause?: () => void; // callback for pause
-  onResume?: () => void; // callback for resume
-  onStart?: () => void; // callback for start
   onReset?: () => void; // callback for reset
 };
 
-export default function Timer({ goal, duration, onComplete, onPause, onResume, onStart, onReset }: TimerProps) {
+export default function Timer({
+  goal,
+  duration,
+  onComplete,
+  onReset,
+}: TimerProps) {
+  console.log('Timer rendered with goal:', goal, 'and duration:', duration);
   const [timeLeft, setTimeLeft] = useState(duration);
   const [isRunning, setIsRunning] = useState(false);
   const [intervalId, setIntervalId] = useState<NodeJS.Timeout | null>(null);
@@ -101,7 +104,6 @@ export default function Timer({ goal, duration, onComplete, onPause, onResume, o
 
   return (
     <div className="flex flex-col items-center justify-center p-12 bg-white/70 rounded-3xl shadow-xl  min-h-full">
-    
       {/* Goal */}
       <motion.h2
         className="text-2xl font-semibold text-gray-800 mb-10 text-center leading-relaxed"
@@ -228,14 +230,13 @@ export default function Timer({ goal, duration, onComplete, onPause, onResume, o
         </Button>
       </div>
 
-     
       <motion.div
-            whileTap={{ scale: 0.9 }}
-            onClick={onReset}
-            className="text-sm text-gray-600 font-medium hover:underline cursor-pointer mb-4 transition-colors duration-200 mt-3"
-          >
-            Clear Timebox
-          </motion.div>
+        whileTap={{ scale: 0.9 }}
+        onClick={onReset}
+        className="text-sm text-gray-600 font-medium hover:underline cursor-pointer mb-4 transition-colors duration-200 mt-3"
+      >
+        Clear Timebox
+      </motion.div>
     </div>
   );
 }

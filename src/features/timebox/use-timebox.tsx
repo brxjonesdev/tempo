@@ -1,11 +1,9 @@
 'use client';
 
-import { time } from 'console';
 import { useState } from 'react';
 
-
 export type Timebox = {
-  id : string;
+  id: string;
   goal: string;
   duration: number; // in seconds
   completionDate: Date | null;
@@ -14,88 +12,82 @@ export type Timebox = {
   isCompleted?: boolean; // optional for future use
   postBoxReview?: string; // optional for future use
   onSelect?: (timebox: Timebox) => void; // callback for selection
-
-}
+};
 export default function useTimebox() {
   const [timeboxes, setTimeboxes] = useState<Timebox[]>([
     {
-  id: '1',
-        goal: 'Complete project report',
-        duration: 3600, // 1 hour
-        completionDate: null,
-        priority: 3,
-        isActive: false,
-      },
-      {
-        id: '2',
-        goal: 'Study for exams',
-        duration: 7200, // 2 hours
-        completionDate: null,
-        priority: 4,
-        isActive: false,
-      },
-      {
-        id: '3',
-        goal: 'Exercise',
-        duration: 1800, // 30 minutes
-        completionDate: null,
-        priority: 2,
-        isActive: false,
-    }
+      id: '1',
+      goal: 'Complete project report',
+      duration: 3600, // 1 hour
+      completionDate: null,
+      priority: 3,
+      isActive: false,
+    },
+    {
+      id: '2',
+      goal: 'Study for exams',
+      duration: 7200, // 2 hours
+      completionDate: null,
+      priority: 4,
+      isActive: false,
+    },
+    {
+      id: '3',
+      goal: 'Exercise',
+      duration: 1800, // 30 minutes
+      completionDate: null,
+      priority: 2,
+      isActive: false,
+    },
   ]);
   const [currentTimebox, setCurrentTimebox] = useState<Timebox | null>(null);
-  const [isTimeboxActive, setIsTimeboxActive] = useState(false);
 
+  function scheduleTimebox(goal: string, duration: number) {
+    const newTimebox: Timebox = {
+      id: Date.now().toString(),
+      goal,
+      duration,
+      completionDate: null,
+      priority: 3, // default priority
+      isActive: false,
+    };
 
-  function scheduleTimebox(timebox: Partial<Timebox>){
-    setTimeboxes((prev) => {
-      const newTimebox: Timebox = {
-        id: (prev.length + 1).toString(),
-        goal: timebox.goal || '',
-        duration: timebox.duration || 3600, // default to 1 hour if not provided
-        completionDate: null,
-        priority: timebox.priority || 3, // default priority
-        isActive: false,
-      };
-      return [...prev, newTimebox];
-    });
+    setTimeboxes((prev) => [...prev, newTimebox]);
   }
 
-  function startPreset(preset: Timebox) {
+  function startTimebox(timebox: Timebox) {
     setCurrentTimebox({
-      ...preset,
+      ...timebox,
       isActive: true,
     });
-    setIsTimeboxActive(true);
-  }
   
+  }
+
   function timeboxControls(intent: string) {
     if (!currentTimebox) return;
 
     switch (intent) {
       case 'start':
         setCurrentTimebox((prev) => ({ ...prev!, isActive: true }));
-        setIsTimeboxActive(true);
         break;
       case 'pause':
         setCurrentTimebox((prev) => ({ ...prev!, isActive: false }));
-        setIsTimeboxActive(false);
         break;
       case 'reset':
-        setCurrentTimebox(null)
+        setCurrentTimebox(null);
         break;
       default:
         break;
     }
   }
 
-
   return {
     currentTimebox,
     timeboxes,
     setTimeboxes,
     scheduleTimebox,
-    startPreset,
+    startTimebox,
     timeboxControls,
+    setCurrentTimebox,
   };
 }

@@ -1,6 +1,8 @@
 # Tempo
 
-**Tempo** is a local-first timeboxing app that helps you start with intention, stay focused, and reflect afterward. No accounts, no cloud—just a simple, offline-friendly ritual for getting into flow.
+**Tempo** is a local-first timeboxing app that helps you start with intention, stay
+focused, and reflect afterward. No accounts, no cloud—just a simple, offline-friendly
+ritual for getting into flow.
 
 ## ✨ Features
 
@@ -28,11 +30,12 @@ Currently in development:
 ```bash
 npm install
 npm run dev
-````
+```
 
 ## 🗃 Data
 
-All data is stored in your browser using IndexedDB via Dexie. No servers, no sync—your data stays on your device.
+All data is stored in your browser using IndexedDB via Dexie. No servers, no sync—your
+data stays on your device.
 
 ---
 

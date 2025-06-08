@@ -15,21 +15,22 @@ type Preset = {
   description: string;
   blurb: string;
   duration: number; // in minutes
-}
+};
 
-
-export default function Presets({onSelect}: { onSelect: (timebox: Timebox) => void }) {
+export default function Presets({ onSelect }: { onSelect: (timebox: Timebox) => void }) {
   const presets = [
     {
       title: 'Pomodoro',
       description: '25 min focus / 5 min break',
-      blurb: 'Perfect for maintaining productivity without burnout. Great for deep work sessions.',
+      blurb:
+        'Perfect for maintaining productivity without burnout. Great for deep work sessions.',
       duration: 25,
     },
     {
       title: 'Creative Sprint',
       description: '60 minutes of uninterrupted creation',
-      blurb: 'Ideal for writing, composing, or designing when you want to enter flow state.',
+      blurb:
+        'Ideal for writing, composing, or designing when you want to enter flow state.',
       duration: 60,
     },
     {
@@ -65,7 +66,8 @@ export default function Presets({onSelect}: { onSelect: (timebox: Timebox) => vo
     {
       title: 'Zen Mode',
       description: '20 minutes of quiet reflection or meditation',
-      blurb: 'Helpful for resetting your nervous system, gaining clarity, or centering your mind.',
+      blurb:
+        'Helpful for resetting your nervous system, gaining clarity, or centering your mind.',
       duration: 20,
     },
     {
@@ -82,20 +84,18 @@ export default function Presets({onSelect}: { onSelect: (timebox: Timebox) => vo
     },
   ];
 
-  function handlePresetSelect(preset: Preset){
-  // convert preset to Timebox format
-  const presetTimebox: Timebox = {
-    id: (Math.random() * 10000).toString(), // simple random ID for demo
-    goal: preset.title,
-    duration: preset.duration * 60, // convert minutes to seconds
-    completionDate: null,
-    priority: 3, // default priority
-    isActive: true, // set as active for demo
-  };
+  function handlePresetSelect(preset: Preset) {
+    // convert preset to Timebox format
+    const presetTimebox: Timebox = {
+      id: (Math.random() * 10000).toString(), // simple random ID for demo
+      goal: preset.title,
+      duration: preset.duration * 60, // convert minutes to seconds
+      completionDate: null,
+      priority: 3, // default priority
+      isActive: true, // set as active for demo
+    };
 
     onSelect(presetTimebox);
-  
-  
   }
 
   return (
@@ -115,9 +115,12 @@ export default function Presets({onSelect}: { onSelect: (timebox: Timebox) => vo
                   <p className="text-sm text-muted-foreground">{preset.description}</p>
                 </div>
                 <div>
-                  <p className="text-sm text-[#50696b] hidden lg:block font-heading font-normal">{preset.blurb}</p>
+                  <p className="text-sm text-[#50696b] hidden lg:block font-heading font-normal">
+                    {preset.blurb}
+                  </p>
                 </div>
-                <Button className="text-sm bg-[#50696b] text-[#cceaec]"
+                <Button
+                  className="text-sm bg-[#50696b] text-[#cceaec]"
                   onClick={() => handlePresetSelect(preset)}
                 >
                   Start {preset.duration} min
