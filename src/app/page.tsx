@@ -25,10 +25,10 @@ export default function Home() {
   } = useTimebox();
 
   return (
-    <main className="bg-[#d6fcff] flex flex-col items-center p-4 w-full font-body font-medium gap-2 h-full">
+    <main className=" flex flex-col items-center p-4 w-full font-body font-medium gap-2 h-full">
       <div className="max-w-7xl w-full space-y-4 lg:space-y-0 lg:flex gap-3 flex-1 flex-col h-full">
-        <div>
-          <h2 className="text-2xl font-bold tracking-tight text-[#93bdc0]">Tempo</h2>
+        <div className=''>
+          <h2 className=" text-lg lg:text-2xl font-bold tracking-tight text-[#93bdc0]">Tempo</h2>
         </div>
 
         <section className="lg:grid grid-cols-3 gap-4 flex-1 overflow-hidden space-y-6 lg:space-y-0">
@@ -57,8 +57,7 @@ export default function Home() {
                         id: Date.now().toString(),
                         goal,
                         duration,
-                        completionDate: null,
-                        priority: 3,
+                        isCompleted: false,
                         isActive: false,
                       });
                     }}
@@ -71,10 +70,7 @@ export default function Home() {
             )}
           </div>
           <div className="flex flex-col flex-1 min-h-0 col-span-2">
-            <Queue
-              timeboxes={timeboxes}
-              onSelectTimebox={selectTimeboxFromQueue}
-            />
+            <Queue timeboxes={timeboxes} onSelectTimebox={selectTimeboxFromQueue} />
           </div>
         </section>
       </div>

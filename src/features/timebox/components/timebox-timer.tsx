@@ -8,27 +8,19 @@ import { Button } from '@/shared/components/ui/button';
 type TimerProps = {
   goal: string;
   duration: number; // duration in seconds
-  onComplete?: () => void; // callback for completion
-  onReset?: () => void; // callback for reset
+  onComplete: () => void; // callback for completion
+  onReset: () => void; // callback for reset
 };
 
-export default function Timer({
-  goal,
-  duration,
-  onComplete,
-  onReset,
-}: TimerProps) {
+export default function Timer({ goal, duration, onComplete, onReset }: TimerProps) {
   const [timeLeft, setTimeLeft] = useState(duration);
   const [isRunning, setIsRunning] = useState(false);
   const [intervalId, setIntervalId] = useState<NodeJS.Timeout | null>(null);
-
 
   // Calculate progress percentage
   const progress = ((duration - timeLeft) / duration) * 100;
   const circumference = 2 * Math.PI * 130; // radius of 130
   const strokeDashoffset = circumference - (progress / 100) * circumference;
-
-
 
   // update time left when duration changes
   useEffect(() => {
@@ -41,8 +33,6 @@ export default function Timer({
     const secs = seconds % 60;
     return `${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
   };
-  
-
 
   // Start timer
   const startTimer = () => {
@@ -84,6 +74,9 @@ export default function Timer({
   const completeTask = () => {
     setIsRunning(false);
     setTimeLeft(0);
+    setTimeout(() => {
+      onComplete();
+    }, 1000);
     if (intervalId) {
       clearInterval(intervalId);
       setIntervalId(null);
@@ -99,7 +92,6 @@ export default function Timer({
     }
   };
 
-  // Cleanup interval on unmount
   useEffect(() => {
     return () => {
       if (intervalId) {
@@ -108,12 +100,10 @@ export default function Timer({
     };
   }, [intervalId]);
 
-  // Timer completion effect
   const isCompleted = timeLeft === 0;
 
   return (
     <div className="flex flex-col items-center justify-center p-12 bg-white/70 rounded-3xl shadow-xl  min-h-full">
-      {/* Goal */}
       <motion.h2
         className="text-2xl font-semibold text-gray-800 mb-10 text-center leading-relaxed"
         initial={{ opacity: 0, y: -20 }}

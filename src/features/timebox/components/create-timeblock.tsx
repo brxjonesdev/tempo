@@ -14,11 +14,10 @@ export default function CreateTimeblock({
   onSchedule: (goal: string, duration: number) => void;
 }) {
   const [selectedTime, setSelectedTime] = useState({ hours: 1, minutes: 30 });
-  const [ goal, setGoal ] = useState('');
-
+  const [goal, setGoal] = useState('');
 
   function handleQuickStart() {
-  const totalDuration = selectedTime.hours * 60 + selectedTime.minutes;
+    const totalDuration = selectedTime.hours * 60 + selectedTime.minutes;
     if (goal.trim() && totalDuration > 0) {
       onQuickStart(goal.trim(), totalDuration * 60); // convert to seconds
       setGoal('');
@@ -152,18 +151,25 @@ export default function CreateTimeblock({
         </CardContent>
       </div>
       <div className=" flex-1 flex flex-col font-heading gap-4">
-        <Button 
-        onClick={handleQuickStart}
-        disabled={!goal.trim() || selectedTime.hours === 0 && selectedTime.minutes === 0}
-        className="py-4 bg-[#6aacaf] text-[#f8f8f8]" size={'lg'}>
-          Start{' '}
-          {selectedTime.hours > 0 && `${selectedTime.hours}h`}
+        <Button
+          onClick={handleQuickStart}
+          disabled={
+            !goal.trim() || (selectedTime.hours === 0 && selectedTime.minutes === 0)
+          }
+          className="py-4 bg-[#6aacaf] text-[#f8f8f8]"
+          size={'lg'}
+        >
+          Start {selectedTime.hours > 0 && `${selectedTime.hours}h`}
           {selectedTime.minutes > 0 && `${selectedTime.minutes}min`} Timeblock
         </Button>
-        <Button 
-        onClick={handleScheduleLater}
-        disabled={!goal.trim() || selectedTime.hours === 0 && selectedTime.minutes === 0}
-        className="py-4" variant="secondary">
+        <Button
+          onClick={handleScheduleLater}
+          disabled={
+            !goal.trim() || (selectedTime.hours === 0 && selectedTime.minutes === 0)
+          }
+          className="py-4"
+          variant="secondary"
+        >
           Schedule Later
         </Button>
       </div>

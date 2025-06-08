@@ -13,30 +13,7 @@ export type Timebox = {
 };
 
 export default function useTimebox() {
-  const [timeboxes, setTimeboxes] = useState<Timebox[]>([
-    {
-      id: '1',
-      goal: 'Complete project report',
-      duration: 3600,
-      isCompleted: true,
-      isActive: false,
-      postBoxReview: "meow meow meow",
-    },
-    {
-      id: '2',
-      goal: 'Study for exams',
-      duration: 7200,
-      isCompleted: false,
-      isActive: false,
-    },
-    {
-      id: '3',
-      goal: 'Exercise',
-      duration: 1800,
-      isCompleted: false,
-      isActive: false,
-    },
-  ]);
+  const [timeboxes, setTimeboxes] = useState<Timebox[]>([]);
 
   const [currentTimebox, setCurrentTimebox] = useState<Timebox | null>(null);
 
@@ -59,17 +36,15 @@ export default function useTimebox() {
     if (!currentTimebox) return;
 
     switch (intent) {
-      case 'start':
-        setCurrentTimebox((prev) => ({ ...prev!, isActive: true }));
-        break;
-      case 'pause':
-        setCurrentTimebox((prev) => ({ ...prev!, isActive: false }));
-        break;
+      case 'complete':
+        setCurrentTimebox((prev) => ({
+          ...prev!,
+          isCompleted: true,
+          isActive: false,
+        }));
       case 'reset':
         setCurrentTimebox(null);
-        setTimeboxes((prev) =>
-          prev.map((tb) => ({ ...tb, isActive: false }))
-        );
+        setTimeboxes((prev) => prev.map((tb) => ({ ...tb, isActive: false })));
         break;
     }
   }
@@ -79,10 +54,8 @@ export default function useTimebox() {
     setCurrentTimebox({ ...timebox, isActive: true });
     setTimeboxes((prev) =>
       prev.map((tb) =>
-        tb.id === timebox.id
-          ? { ...tb, isActive: true }
-          : { ...tb, isActive: false }
-      )
+        tb.id === timebox.id ? { ...tb, isActive: true } : { ...tb, isActive: false },
+      ),
     );
   }
 

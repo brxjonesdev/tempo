@@ -1,24 +1,30 @@
-"use client"
+'use client';
 
-import { useState } from "react"
-import { Card, CardContent, CardHeader, CardTitle } from "@/shared/components/ui/card"
-import { Badge } from "@/shared/components/ui/badge"
-import { Button } from "@/shared/components/ui/button"
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/shared/components/ui/dialog"
-import { Clock, MessageSquare, CheckCircle2, Play, Target } from "lucide-react"
+import { useState } from 'react';
+import { Card, CardContent, CardHeader, CardTitle } from '@/shared/components/ui/card';
+import { Badge } from '@/shared/components/ui/badge';
+import { Button } from '@/shared/components/ui/button';
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from '@/shared/components/ui/dialog';
+import { Clock, MessageSquare, CheckCircle2, Play, Target } from 'lucide-react';
 
 // Assuming this is your Timebox type
 type Timebox = {
-  goal: string
-  duration: number
-  isActive: boolean
-  isCompleted: boolean
-  postBoxReview?: string
-}
+  goal: string;
+  duration: number;
+  isActive: boolean;
+  isCompleted: boolean;
+  postBoxReview?: string;
+};
 
 type TimeboxCardProps = Timebox & {
-  onSelect?: (timebox: Timebox) => void
-}
+  onSelect?: (timebox: Timebox) => void;
+};
 
 export default function TimeboxCard({
   goal,
@@ -28,23 +34,23 @@ export default function TimeboxCard({
   postBoxReview,
   onSelect,
 }: TimeboxCardProps) {
-  const [showReviewHover, setShowReviewHover] = useState(false)
-  const [isHovered, setIsHovered] = useState(false)
+  const [showReviewHover, setShowReviewHover] = useState(false);
+  const [isHovered, setIsHovered] = useState(false);
 
   // Format duration from seconds to readable format
   const formatDuration = (seconds: number) => {
-    const hours = Math.floor(seconds / 3600)
-    const minutes = Math.floor((seconds % 3600) / 60)
-    const remainingSeconds = seconds % 60
+    const hours = Math.floor(seconds / 3600);
+    const minutes = Math.floor((seconds % 3600) / 60);
+    const remainingSeconds = seconds % 60;
 
     if (hours > 0) {
-      return `${hours}h ${minutes}m`
+      return `${hours}h ${minutes}m`;
     } else if (minutes > 0) {
-      return `${minutes}m ${remainingSeconds}s`
+      return `${minutes}m ${remainingSeconds}s`;
     } else {
-      return `${remainingSeconds}s`
+      return `${remainingSeconds}s`;
     }
-  }
+  };
 
   const handleCardClick = () => {
     if (onSelect) {
@@ -54,33 +60,35 @@ export default function TimeboxCard({
         isActive,
         isCompleted,
         postBoxReview,
-      })
+      });
     }
-  }
+  };
 
   const getCardStyles = () => {
-    let baseStyles = "w-full transition-all duration-300 cursor-pointer group relative overflow-hidden"
+    let baseStyles =
+      'w-full transition-all duration-300 cursor-pointer group relative overflow-hidden';
 
     if (isActive) {
-      baseStyles += " ring-2 ring-blue-500 shadow-lg bg-blue-50/50 border-blue-200"
+      baseStyles += ' ring-2 ring-blue-500 shadow-lg bg-blue-50/50 border-blue-200';
     } else if (isCompleted) {
-      baseStyles += " bg-gradient-to-br from-green-50 to-emerald-50 border-green-200 shadow-sm"
+      baseStyles +=
+        ' bg-gradient-to-br from-green-50 to-emerald-50 border-green-200 shadow-sm';
     } else {
-      baseStyles += " hover:shadow-md hover:border-gray-300"
+      baseStyles += ' hover:shadow-md hover:border-gray-300';
     }
 
     if (isHovered && onSelect) {
-      baseStyles += " scale-[1.02] shadow-lg"
+      baseStyles += ' scale-[1.02] shadow-lg';
     }
 
-    return baseStyles
-  }
+    return baseStyles;
+  };
 
   const getStatusIcon = () => {
-    if (isCompleted) return <CheckCircle2 className="w-4 h-4 text-green-600" />
-    if (isActive) return <Play className="w-4 h-4 text-blue-600" />
-    return <Target className="w-4 h-4 text-gray-500" />
-  }
+    if (isCompleted) return <CheckCircle2 className="w-4 h-4 text-green-600" />;
+    if (isActive) return <Play className="w-4 h-4 text-blue-600" />;
+    return <Target className="w-4 h-4 text-gray-500" />;
+  };
 
   const getStatusBadge = () => {
     if (isActive) {
@@ -89,7 +97,7 @@ export default function TimeboxCard({
           <Play className="w-3 h-3 mr-1" />
           Active
         </Badge>
-      )
+      );
     }
     if (isCompleted) {
       return (
@@ -97,10 +105,10 @@ export default function TimeboxCard({
           <CheckCircle2 className="w-3 h-3 mr-1" />
           Completed
         </Badge>
-      )
+      );
     }
-    return null
-  }
+    return null;
+  };
 
   return (
     <Card
@@ -108,12 +116,12 @@ export default function TimeboxCard({
       onClick={handleCardClick}
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
-      role={onSelect ? "button" : undefined}
+      role={onSelect ? 'button' : undefined}
       tabIndex={onSelect ? 0 : undefined}
       onKeyDown={(e) => {
-        if (onSelect && (e.key === "Enter" || e.key === " ")) {
-          e.preventDefault()
-          handleCardClick()
+        if (onSelect && (e.key === 'Enter' || e.key === ' ')) {
+          e.preventDefault();
+          handleCardClick();
         }
       }}
     >
@@ -179,7 +187,9 @@ export default function TimeboxCard({
                     </div>
                     <div className="bg-green-50 border border-green-200 p-4 rounded-lg">
                       <p className="text-sm text-gray-600 mb-2">Review:</p>
-                      <p className="text-sm leading-relaxed text-gray-800">{postBoxReview}</p>
+                      <p className="text-sm leading-relaxed text-gray-800">
+                        {postBoxReview}
+                      </p>
                     </div>
                   </div>
                 </DialogContent>
@@ -198,8 +208,12 @@ export default function TimeboxCard({
 
               {showReviewHover && (
                 <div className="absolute z-20 mt-2 p-4 bg-white border border-gray-200 rounded-lg shadow-xl max-w-xs left-0 animate-in fade-in-0 zoom-in-95 duration-200">
-                  <p className="text-sm line-clamp-3 text-gray-700 mb-2">{postBoxReview}</p>
-                  <p className="text-xs text-gray-500">Click &ldquo;View Review&quot; for full text</p>
+                  <p className="text-sm line-clamp-3 text-gray-700 mb-2">
+                    {postBoxReview}
+                  </p>
+                  <p className="text-xs text-gray-500">
+                    Click &ldquo;View Review&quot; for full text
+                  </p>
                   <div className="absolute -top-1 left-4 w-2 h-2 bg-white border-l border-t border-gray-200 rotate-45" />
                 </div>
               )}
@@ -215,4 +229,5 @@ export default function TimeboxCard({
         )}
       </CardContent>
     </Card>
-  )}
+  );
+}
