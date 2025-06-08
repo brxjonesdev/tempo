@@ -24,8 +24,10 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" className="h-full">
-      <body className={`${quicksand.variable} ${workSans.variable} antialiased lg:h-screen`}>
-    {children}
+      <body
+        className={`${quicksand.variable} ${workSans.variable} antialiased lg:h-screen`}
+      >
+        {children}
       </body>
     </html>
   );

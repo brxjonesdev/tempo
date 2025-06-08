@@ -8,17 +8,32 @@ import { Button } from '@/shared/components/ui/button';
 type TimerProps = {
   goal: string;
   duration: number; // duration in seconds
+  onComplete?: () => void; // callback for completion
+  onReset?: () => void; // callback for reset
 };
 
-export default function Timer({ goal, duration }: TimerProps) {
+export default function Timer({
+  goal,
+  duration,
+  onComplete,
+  onReset,
+}: TimerProps) {
   const [timeLeft, setTimeLeft] = useState(duration);
   const [isRunning, setIsRunning] = useState(false);
   const [intervalId, setIntervalId] = useState<NodeJS.Timeout | null>(null);
+
 
   // Calculate progress percentage
   const progress = ((duration - timeLeft) / duration) * 100;
   const circumference = 2 * Math.PI * 130; // radius of 130
   const strokeDashoffset = circumference - (progress / 100) * circumference;
+
+
+
+  // update time left when duration changes
+  useEffect(() => {
+    setTimeLeft(duration);
+  }, [duration]);
 
   // Format time as MM:SS
   const formatTime = (seconds: number) => {
@@ -26,6 +41,8 @@ export default function Timer({ goal, duration }: TimerProps) {
     const secs = seconds % 60;
     return `${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
   };
+  
+
 
   // Start timer
   const startTimer = () => {
@@ -222,17 +239,13 @@ export default function Timer({ goal, duration }: TimerProps) {
         </Button>
       </div>
 
-      {/* Status indicator */}
-      <div className="flex items-center gap-3">
-        <motion.div
-          className={`w-3 h-3 rounded-full ${isRunning ? 'bg-green-500' : isCompleted ? 'bg-blue-500' : 'bg-gray-400'}`}
-          animate={isRunning ? { scale: [1, 1.2, 1] } : { scale: 1 }}
-          transition={{ duration: 1, repeat: isRunning ? Number.POSITIVE_INFINITY : 0 }}
-        />
-        <span className="text-sm text-gray-600 font-medium">
-          {isRunning ? 'Running' : isCompleted ? 'Completed' : 'Paused'}
-        </span>
-      </div>
+      <motion.div
+        whileTap={{ scale: 0.9 }}
+        onClick={onReset}
+        className="text-sm text-gray-600 font-medium hover:underline cursor-pointer mb-4 transition-colors duration-200 mt-3"
+      >
+        Clear Timebox
+      </motion.div>
     </div>
   );
 }
