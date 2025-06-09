@@ -16,7 +16,8 @@ import {
   DropdownMenuTrigger,
 } from '@/shared/components/ui/dropdown-menu';
 import TimeboxCard from './timebox-card';
-import { Timebox } from '@/features/timebox/use-timebox';
+import { Timebox } from '@/features/timebox/hooks/use-timeboxes';
+
 
 export default function Queue({
   timeboxes,

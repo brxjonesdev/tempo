@@ -1,12 +1,17 @@
 import { ok, Result, err} from '@/lib/result';
-import { Timebox } from './use-timebox';
+import { db } from '../../../db';
+import { Timebox } from './hooks/use-timeboxes';
 
 export const timeboxRepository = {
 
-    addTimebox: (timebox: Timebox): boolean => {
-        // Here you would typically add the timebox to a database or state management system
-        console.log("Timebox added:", timebox);
-        return true; // Return true if successful
+    addTimebox: async (timebox: Timebox): Promise<Result<boolean, string>> => {
+        try{
+            await db.timeboxes.add(timebox);
+            return ok(true); 
+
+        }catch (error) {
+            return err(error instanceof Error ? error.message : "Failed to add timebox to the database.");
+        }
     },
 
     updateTimebox: (timeboxId: string, updatedTimebox: Partial<Timebox>): Result<boolean, string> => {
@@ -21,16 +26,14 @@ export const timeboxRepository = {
         return ok(true) // Return true if successful
     },
 
-    fetchAllTimeboxes: (): Result<Timebox[], string> => {
-        // Here you would typically fetch all timeboxes from a database or state management system
-        const timeboxes: Timebox[] = []; // Replace with actual fetching logic
-        console.log("Fetched timeboxes:", timeboxes);
-        
-        if (timeboxes.length === 0) {
-            return ok([]); // Return an empty array if no timeboxes are found
+    fetchAllTimeboxes: async (): Promise<Result<Timebox[], string>> => {
+        try{
+            const timeboxes = await db.timeboxes.toArray();
+            return ok(timeboxes);
+        }catch (error) {
+            console.error("Error fetching timeboxes:", error);
+            return err("Failed to fetch timeboxes from the database.");
         }
-        
-        return ok(timeboxes); // Return the fetched timeboxes
     }
 }
 

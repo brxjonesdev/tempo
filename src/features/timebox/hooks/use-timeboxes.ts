@@ -21,10 +21,13 @@ export type Timebox = {
 export default function useTimebox() {
   const [timeboxes, setTimeboxes] = useState<Timebox[]>([]);
   const [currentTimebox, setCurrentTimebox] = useState<Timebox | null>(null);
-
+  const [status, setStatus] = useState({
+    loading: false,
+    error: null as string | null,
+  })
   useEffect(() => {
   async function loadTimeboxes() {
-      const result = fetchTimeboxes();
+      const result = await fetchTimeboxes();
       if (!result.ok) {
         console.error("Failed to load timeboxes:", result.error);
         return;
@@ -37,8 +40,8 @@ export default function useTimebox() {
     };
   }, []);
 
-  function fetchTimeboxes(){
-    const result = fetchTimeboxesFromDB()
+  async function fetchTimeboxes(){
+    const result =  await fetchTimeboxesFromDB()
     if (!result.ok) {
       return err(result.error);
     }
@@ -135,5 +138,6 @@ export default function useTimebox() {
     timeboxes,
     updateTimeboxById,
     deleteTimebox,
+    status,
   };
 }
