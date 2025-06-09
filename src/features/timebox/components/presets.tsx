@@ -8,7 +8,7 @@ import {
   CarouselNext,
   CarouselPrevious,
 } from '@/shared/components/ui/carousel';
-import { Timebox } from '../use-timebox';
+import { Timebox } from '../hooks/use-timeboxes';
 
 type Preset = {
   title: string;
@@ -87,12 +87,11 @@ export default function Presets({ onSelect }: { onSelect: (timebox: Timebox) => 
   function handlePresetSelect(preset: Preset) {
     // convert preset to Timebox format
     const presetTimebox: Timebox = {
-      id: (Math.random() * 10000).toString(), // simple random ID for demo
+      id: (Math.random() * 10000).toString(),
       goal: preset.title,
-      duration: preset.duration * 60, // convert minutes to seconds
-      completionDate: null,
-      priority: 3, // default priority
-      isActive: true, // set as active for demo
+      duration: preset.duration * 60,
+      isCompleted: false, // default to not completed
+      isActive: true,
     };
 
     onSelect(presetTimebox);
@@ -130,7 +129,6 @@ export default function Presets({ onSelect }: { onSelect: (timebox: Timebox) => 
           ))}
         </CarouselContent>
 
-        {/* Hidden native controls for programmatic access */}
         <div className="hidden">
           <CarouselPrevious data-carousel-prev />
           <CarouselNext data-carousel-next />
