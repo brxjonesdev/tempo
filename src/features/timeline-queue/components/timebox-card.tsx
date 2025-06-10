@@ -23,7 +23,7 @@ type Timebox = {
 };
 
 type TimeboxCardProps = Timebox & {
-  onSelect?: (timebox: Timebox) => void;
+  onSelect: (timebox: Timebox) => void;
 };
 
 export default function TimeboxCard({
@@ -53,15 +53,16 @@ export default function TimeboxCard({
   };
 
   const handleCardClick = () => {
-    if (onSelect) {
-      onSelect({
+    if (isActive || isCompleted) {
+      return;
+    }
+    onSelect({
         goal,
         duration,
         isActive,
         isCompleted,
         postBoxReview,
       });
-    }
   };
 
   const getCardStyles = () => {
@@ -77,7 +78,7 @@ export default function TimeboxCard({
       baseStyles += ' hover:shadow-md hover:border-gray-300';
     }
 
-    if (isHovered && onSelect) {
+    if (isHovered) {
       baseStyles += ' scale-[1.02] shadow-lg';
     }
 
@@ -116,10 +117,10 @@ export default function TimeboxCard({
       onClick={handleCardClick}
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
-      role={onSelect ? 'button' : undefined}
-      tabIndex={onSelect ? 0 : undefined}
+      role={'button'}
+      tabIndex={0}
       onKeyDown={(e) => {
-        if (onSelect && (e.key === 'Enter' || e.key === ' ')) {
+        if ((e.key === 'Enter' || e.key === ' ')) {
           e.preventDefault();
           handleCardClick();
         }
@@ -221,12 +222,9 @@ export default function TimeboxCard({
           </div>
         )}
 
-        {/* Selection indicator */}
-        {onSelect && (
-          <div className="absolute bottom-2 right-2 opacity-0 group-hover:opacity-100 transition-opacity duration-200">
+        <div className="absolute bottom-2 right-2 opacity-0 group-hover:opacity-100 transition-opacity duration-200">
             <div className="w-2 h-2 bg-blue-500 rounded-full" />
           </div>
-        )}
       </CardContent>
     </Card>
   );
