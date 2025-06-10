@@ -253,11 +253,11 @@ export default function Timer({ goal, duration, onComplete, onReset }: TimerProp
 
       {/* Review Modal */}
       <Dialog open={showReviewModal} onOpenChange={setShowReviewModal}>
-        <DialogContent className="sm:max-w-md">
+        <DialogContent className="sm:max-w-lg font-heading bg-[#5ca7ae] text-[#eef6f7] border-none shadow-2xl">
           <DialogHeader>
             <DialogTitle>Post-Box Review</DialogTitle>
           </DialogHeader>
-          <div className="space-y-4">
+          <div className="space-y-4 font-body">
             <div>
               <Label htmlFor="review" className="text-sm font-medium">
                 How did this timebox session go? What did you accomplish?
@@ -267,15 +267,17 @@ export default function Timer({ goal, duration, onComplete, onReset }: TimerProp
                 placeholder="Reflect on your progress, challenges, and achievements during this timebox session..."
                 value={reviewText}
                 onChange={(e) => setReviewText(e.target.value)}
-                className="mt-2 min-h-[120px]"
+                className="mt-2 min-h-[120px] resize-none border-[#eef6f7] border-2 text-[#eef6f7] placeholder:text-[#eef6f7]"
                 autoFocus
               />
             </div>
             <div className="flex justify-end gap-3">
-              <Button variant="outline" onClick={handleModalClose}>
+              <Button variant="outline" onClick={handleModalClose} className="bg-[#5ca7ae] border-none shadow-none hover:text-[#5ca7ae] cursor-pointer">
                 Skip Review
               </Button>
-              <Button onClick={handleReviewSubmit}>Complete Session</Button>
+              <Button onClick={handleReviewSubmit}
+                className="bg-[#7cb3ba] border-none  hover:text-[#5ca7ae] transition-colors duration-200  cursor-pointer"
+              >Complete Session</Button>
             </div>
           </div>
         </DialogContent>

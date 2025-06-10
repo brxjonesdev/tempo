@@ -115,7 +115,6 @@ export default function useTimebox() {
   }
 
   function completeTimebox(timeboxId: string, postBoxReview?: string | undefined) {
-    console.log("Completing timebox:", timeboxId, postBoxReview);
     const timebox = timeboxes.find(tb => tb.id === timeboxId);
     if (!timebox) {
       // check if timebox is actually a preset
@@ -136,6 +135,9 @@ export default function useTimebox() {
       return err("Failed to complete timebox");
     }
     setCurrentTimebox(null);
+    setTimeboxes((prev) =>
+      prev.map((tb) => (tb.id === timeboxId ? { ...tb, isActive: false} : tb)),
+    );
   }
 
 
