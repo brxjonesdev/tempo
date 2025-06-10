@@ -37,7 +37,7 @@ export default function Home() {
               <Timer
                 goal={currentTimebox.goal}
                 duration={currentTimebox.duration}
-                onComplete={() => completeTimebox(currentTimebox.id)}
+                onComplete={(postBoxReview?: string) => completeTimebox(currentTimebox.id, postBoxReview)}
                 onReset={() => reset()}
               />
             ) : (
