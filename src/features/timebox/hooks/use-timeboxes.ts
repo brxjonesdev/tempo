@@ -49,12 +49,12 @@ export default function useTimebox() {
     return result;
   }
 
-  function updateTimeboxById(timeboxId: string, updatedTimebox: Partial<Timebox>){
+  async function updateTimeboxById(timeboxId: string, updatedTimebox: Partial<Timebox>){
     const existingTimebox = timeboxes.find((tb) => tb.id === timeboxId);
     setTimeboxes((prev) =>
       prev.map((tb) => (tb.id === timeboxId ? { ...tb, ...updatedTimebox } : tb)),
     );
-  const response = updatePersistedTimebox( timeboxId, updatedTimebox );
+  const response = await updatePersistedTimebox( timeboxId, updatedTimebox );
     if (!response.ok) {
     setTimeboxes((prev) =>
         prev.map((tb) => (tb.id === timeboxId ? { ...tb, ...existingTimebox } : tb)),
@@ -64,19 +64,19 @@ export default function useTimebox() {
     return ok(true);
   }
 
-  function deleteTimebox(timeboxId: string)  {
+  async function deleteTimebox(timeboxId: string)  {
     const timeboxToDelete = timeboxes.find((tb) => tb.id === timeboxId);
     if (!timeboxToDelete) return err("Timebox not found");
 
     setTimeboxes((prev) => prev.filter((tb) => tb.id !== timeboxId));
-    const response = deleteTimeboxByID(timeboxId);
+    const response = await deleteTimeboxByID(timeboxId);
     if (!response.ok) {
       setTimeboxes((prev) => [...prev, timeboxToDelete]);
       return err(response.error);
     }
   }
 
-  function persistTimebox( goal: string, duration: number): Result<Timebox, string> {
+  async function persistTimebox( goal: string, duration: number): Promise<Result<Timebox, string>> {
   if (!goal || duration <= 0) {
         return err("Invalid goal or duration");
       }
@@ -88,7 +88,7 @@ export default function useTimebox() {
         isCompleted: false,
     }
     setTimeboxes((prev) => [...prev, timebox]);
-    const result = addTimeboxToQueue(timebox);
+    const result = await addTimeboxToQueue(timebox);
     if (!result.ok) {
         setTimeboxes((prev) => prev.filter((tb) => tb.id !== timebox.id));
         return err(result.error);

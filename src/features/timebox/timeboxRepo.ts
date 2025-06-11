@@ -14,16 +14,31 @@ export const timeboxRepository = {
         }
     },
 
-    updateTimebox: (timeboxId: string, updatedTimebox: Partial<Timebox>): Result<boolean, string> => {
-        // Here you would typically update the timebox in a database or state management system
-        console.log(`Timebox updated: ID=${timeboxId}`, updatedTimebox);
-        return ok(true); // Return true if successful
+    updateTimebox: async (timeboxId: string, updatedTimebox: Partial<Timebox>): Promise<Result<boolean, string>> => {
+        try {
+            if (!timeboxId || !updatedTimebox) {
+                return err("Invalid input: must provide a valid ID and updated timebox data.");
+            }
+            await db.timeboxes.update(timeboxId, updatedTimebox);
+            console.log(`Timebox updated: ID=${timeboxId}, Updated Data=${JSON.stringify(updatedTimebox)}`);
+            return ok(true);
+
+
+        } catch (error) {
+            return err(error instanceof Error ? error.message : "Failed to update timebox.");
+        }
     },
 
-    deleteTimebox: (timeboxId: string): Result<boolean, string> => {
-        // Here you would typically delete the timebox from a database or state management system
-        console.log(`Timebox deleted: ID=${timeboxId}`);
-        return ok(true) // Return true if successful
+    deleteTimebox: async (timeboxId: string): Promise<Result<boolean, string>> => {
+        try {
+            if (!timeboxId) {
+                return err("Invalid input: must provide a valid ID to delete the timebox.");
+            }
+            await db.timeboxes.delete(timeboxId);
+            return ok(true);
+        } catch (error) {
+            return err(error instanceof Error ? error.message : "Failed to delete timebox.");
+        }
     },
 
     fetchAllTimeboxes: async (): Promise<Result<Timebox[], string>> => {
