@@ -1,20 +1,11 @@
 import React from 'react';
-import { Button } from '@/shared/components/ui/button';
 import {
   Card,
-  CardAction,
   CardContent,
   CardDescription,
   CardHeader,
   CardTitle,
 } from '@/shared/components/ui/card';
-
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from '@/shared/components/ui/dropdown-menu';
 import TimeboxCard from './timebox-card';
 import { Timebox } from '@/features/timebox/hooks/use-timeboxes';
 
@@ -37,18 +28,6 @@ export default function Queue({
         <CardDescription className="font-heading font-normal">
           Upcoming timeblocks will appear here.
         </CardDescription>
-        <CardAction>
-          <DropdownMenu>
-            <DropdownMenuTrigger asChild>
-              <Button variant="outline">Sort</Button>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent className="font-heading">
-              <DropdownMenuItem>Completed</DropdownMenuItem>
-              <DropdownMenuItem>In Progress</DropdownMenuItem>
-              <DropdownMenuItem>Upcoming</DropdownMenuItem>
-            </DropdownMenuContent>
-          </DropdownMenu>
-        </CardAction>
       </CardHeader>
 
       <CardContent className="overflow-y-scroll p-4 space-y-4 flex-1 flex flex-col">
