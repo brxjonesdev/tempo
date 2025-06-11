@@ -8,23 +8,18 @@ import { Badge } from "@/shared/components/ui/badge"
 import { Button } from "@/shared/components/ui/button"
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/shared/components/ui/dialog"
 import { Clock, MessageSquare, CheckCircle2, Play, Target } from "lucide-react"
+import { Timebox } from "@/features/timebox/hooks/use-timeboxes"
 
-// Assuming this is your Timebox type
-type Timebox = {
-  goal: string
-  duration: number
-  isActive: boolean
-  isCompleted: boolean
-  postBoxReview?: string
-}
+
 
 type TimeboxCardProps = Timebox & {
   onSelect: (timebox: Timebox) => void
-  onDelete?: () => void
-  onUpdate?: (updatedTimebox: Partial<Timebox>) => void
+  onDelete: (timeboxID: string) => void
+  onUpdate: (updatedTimebox: Partial<Timebox>) => void
 }
 
 export default function TimeboxCard({
+  id,
   goal,
   duration,
   isActive,
@@ -65,6 +60,7 @@ export default function TimeboxCard({
       isActive,
       isCompleted,
       postBoxReview,
+      id
     })
   }
 
@@ -119,20 +115,16 @@ export default function TimeboxCard({
 
   const handleSave = (e: React.MouseEvent) => {
     e.stopPropagation()
-    if (onUpdate) {
-      onUpdate({
-        goal: editedGoal,
-        duration: editedDuration,
-      })
-    }
+    onUpdate({
+      goal: editedGoal,
+      duration: editedDuration,
+    })
     setIsEditing(false)
   }
 
   const handleDelete = (e: React.MouseEvent) => {
     e.stopPropagation()
-    if (onDelete) {
-      onDelete()
-    }
+    onDelete(id)
   }
 
   const handleDurationChange = (value: string) => {

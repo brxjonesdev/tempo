@@ -23,10 +23,11 @@ export default function Home() {
     selectTimebox,
     persistTimebox,
     updateTimeboxById,
+    deleteTimebox
   } = useTimebox();
 
   return (
-    <main className=" flex flex-col items-center p-4 w-full font-body font-medium gap-2 h-full">
+    <main className="flex flex-col items-center p-4 w-full font-body font-medium gap-2 h-full">
       <div className="max-w-7xl w-full space-y-4 lg:space-y-0 lg:flex gap-3 flex-1 flex-col h-full">
         <div className=''>
           <h2 className=" text-lg lg:text-2xl font-bold tracking-tight text-[#93bdc0]">Tempo</h2>
@@ -53,8 +54,8 @@ export default function Home() {
                   <Presets onSelect={selectTimebox} />
                   <Separator className="my-6" />
                   <CreateTimeblock
-                    onQuickStart={(goal: string, duration: number) => {
-                      const result = persistTimebox(goal, duration);
+                    onQuickStart={async (goal: string, duration: number) => {
+                      const result = await persistTimebox(goal, duration);
                       if (!result.ok) {
                         alert(result.error);
                       } else {
@@ -73,9 +74,15 @@ export default function Home() {
             <Queue 
             timeboxes={timeboxes} 
             onSelectTimebox={selectTimebox}
+            onDeleteTimebox={(timeboxId: string) => {
+              const response = deleteTimebox(timeboxId);
+              if (!response) {
+                alert("Failed to delete timebox");
+              }
+
+            }}
             onUpdateTimebox ={(updatedTimebox: Partial<Timebox>) => {
-              if (!currentTimebox) return;
-              const response = updateTimeboxById(currentTimebox.id, updatedTimebox);
+              const response = updateTimeboxById(updatedTimebox.id as string, updatedTimebox);
               if (!response) {
                 alert("Failed to update timebox");
               }

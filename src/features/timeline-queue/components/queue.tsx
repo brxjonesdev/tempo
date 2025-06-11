@@ -23,10 +23,12 @@ export default function Queue({
   timeboxes,
   onSelectTimebox,
   onUpdateTimebox,
+  onDeleteTimebox,
 }: {
   timeboxes: Timebox[];
   onSelectTimebox: (timebox: Timebox) => void;
   onUpdateTimebox: (updatedTimebox: Partial<Timebox>) => void;
+  onDeleteTimebox: (timeboxId: string) => void;
 }) {
   return (
     <Card className="flex flex-col flex-1 bg-white/70 overflow-hidden ">
@@ -59,8 +61,10 @@ export default function Queue({
             }}
             onUpdate={(updatedTimebox: Partial<Timebox>) => {
               onUpdateTimebox({ id: timebox.id, ...updatedTimebox });
-            }
-            }
+            }}
+            onDelete={() => {
+              onDeleteTimebox(timebox.id);
+            }}
           />
         ))}
         {timeboxes.length === 0 && (
