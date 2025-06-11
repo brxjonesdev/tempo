@@ -2,7 +2,7 @@
 
 import Queue from '@/features/timeline-queue/components/queue';
 import Timer from '@/features/timebox/components/timebox-timer';
-import useTimebox from '@/features/timebox/hooks/use-timeboxes';
+import useTimebox, { Timebox } from '@/features/timebox/hooks/use-timeboxes';
 import {
   Card,
   CardHeader,
@@ -22,6 +22,7 @@ export default function Home() {
     reset,
     selectTimebox,
     persistTimebox,
+    updateTimeboxById,
   } = useTimebox();
 
   return (
@@ -71,7 +72,15 @@ export default function Home() {
           <div className="flex flex-col flex-1 min-h-0 col-span-2">
             <Queue 
             timeboxes={timeboxes} 
-            onSelectTimebox={selectTimebox} />
+            onSelectTimebox={selectTimebox}
+            onUpdateTimebox ={(updatedTimebox: Partial<Timebox>) => {
+              if (!currentTimebox) return;
+              const response = updateTimeboxById(currentTimebox.id, updatedTimebox);
+              if (!response) {
+                alert("Failed to update timebox");
+              }
+            }}
+            />
           </div>
         </section>
       </div>

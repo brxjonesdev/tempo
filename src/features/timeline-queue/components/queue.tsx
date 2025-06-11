@@ -22,9 +22,11 @@ import { Timebox } from '@/features/timebox/hooks/use-timeboxes';
 export default function Queue({
   timeboxes,
   onSelectTimebox,
+  onUpdateTimebox,
 }: {
   timeboxes: Timebox[];
   onSelectTimebox: (timebox: Timebox) => void;
+  onUpdateTimebox: (updatedTimebox: Partial<Timebox>) => void;
 }) {
   return (
     <Card className="flex flex-col flex-1 bg-white/70 overflow-hidden ">
@@ -55,6 +57,10 @@ export default function Queue({
             onSelect={() => {
               onSelectTimebox(timebox);
             }}
+            onUpdate={(updatedTimebox: Partial<Timebox>) => {
+              onUpdateTimebox({ id: timebox.id, ...updatedTimebox });
+            }
+            }
           />
         ))}
         {timeboxes.length === 0 && (
