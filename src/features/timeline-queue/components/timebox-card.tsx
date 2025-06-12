@@ -1,16 +1,13 @@
 "use client"
 
 import type React from "react"
-
 import { useState } from "react"
 import { Card, CardContent, CardHeader, CardTitle } from "@/shared/components/ui/card"
 import { Badge } from "@/shared/components/ui/badge"
 import { Button } from "@/shared/components/ui/button"
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/shared/components/ui/dialog"
 import { Clock, MessageSquare, CheckCircle2, Play, Target } from "lucide-react"
-import { Timebox } from "@/features/timebox/hooks/use-timeboxes"
-
-
+import type { Timebox } from "@/features/timebox/hooks/use-timeboxes"
 
 type TimeboxCardProps = Timebox & {
   onSelect: (timebox: Timebox) => void
@@ -34,6 +31,7 @@ export default function TimeboxCard({
   const [isEditing, setIsEditing] = useState(false)
   const [editedGoal, setEditedGoal] = useState(goal)
   const [editedDuration, setEditedDuration] = useState(duration)
+  const [showDeleteConfirm, setShowDeleteConfirm] = useState(false)
 
   // Format duration from seconds to readable format
   const formatDuration = (seconds: number) => {
@@ -60,7 +58,7 @@ export default function TimeboxCard({
       isActive,
       isCompleted,
       postBoxReview,
-      id
+      id,
     })
   }
 
@@ -120,11 +118,6 @@ export default function TimeboxCard({
       duration: editedDuration,
     })
     setIsEditing(false)
-  }
-
-  const handleDelete = (e: React.MouseEvent) => {
-    e.stopPropagation()
-    onDelete(id)
   }
 
   const handleDurationChange = (value: string) => {
@@ -209,32 +202,84 @@ export default function TimeboxCard({
                     </svg>
                     <span className="sr-only">Edit</span>
                   </Button>
-                  <Button
-                    size="sm"
-                    variant="ghost"
-                    onClick={handleDelete}
-                    className="h-7 w-7 p-0 text-red-500 hover:text-red-700 hover:bg-red-50"
-                  >
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      width="15"
-                      height="15"
-                      viewBox="0 0 24 24"
-                      fill="none"
-                      stroke="currentColor"
-                      strokeWidth="2"
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      className="lucide lucide-trash-2"
-                    >
-                      <path d="M3 6h18" />
-                      <path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6" />
-                      <path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2" />
-                      <line x1="10" x2="10" y1="11" y2="17" />
-                      <line x1="14" x2="14" y1="11" y2="17" />
-                    </svg>
-                    <span className="sr-only">Delete</span>
-                  </Button>
+                  <Dialog open={showDeleteConfirm} onOpenChange={setShowDeleteConfirm}>
+                    <DialogTrigger asChild>
+                      <Button
+                        size="sm"
+                        variant="ghost"
+                        onClick={(e) => e.stopPropagation()}
+                        className="h-7 w-7 p-0 text-red-500 hover:text-red-700 hover:bg-red-50"
+                      >
+                        <svg
+                          xmlns="http://www.w3.org/2000/svg"
+                          width="15"
+                          height="15"
+                          viewBox="0 0 24 24"
+                          fill="none"
+                          stroke="currentColor"
+                          strokeWidth="2"
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          className="lucide lucide-trash-2"
+                        >
+                          <path d="M3 6h18" />
+                          <path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6" />
+                          <path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2" />
+                          <line x1="10" x2="10" y1="11" y2="17" />
+                          <line x1="14" x2="14" y1="11" y2="17" />
+                        </svg>
+                        <span className="sr-only">Delete</span>
+                      </Button>
+                    </DialogTrigger>
+                    <DialogContent className="max-w-md">
+                      <DialogHeader>
+                        <DialogTitle className="flex items-center gap-2 text-red-600">
+                          <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            width="20"
+                            height="20"
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            stroke="currentColor"
+                            strokeWidth="2"
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            className="lucide lucide-alert-triangle"
+                          >
+                            <path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3Z" />
+                            <path d="M12 9v4" />
+                            <path d="m12 17 .01 0" />
+                          </svg>
+                          Delete Timebox
+                        </DialogTitle>
+                      </DialogHeader>
+                      <div className="mt-4 space-y-4">
+                        <p className="text-sm text-gray-600">
+                          Are you sure you want to delete this timebox? This action cannot be undone.
+                        </p>
+                        <div className="bg-gray-50 p-3 rounded-lg">
+                          <p className="text-sm text-gray-500 mb-1">Goal:</p>
+                          <p className="font-medium text-gray-900 line-clamp-2">{goal}</p>
+                        </div>
+                        <div className="flex gap-3 justify-end">
+                          <Button variant="outline" onClick={() => setShowDeleteConfirm(false)} className="px-4">
+                            Cancel
+                          </Button>
+                          <Button
+                            variant="destructive"
+                            onClick={(e) => {
+                              e.stopPropagation()
+                              onDelete(id)
+                              setShowDeleteConfirm(false)
+                            }}
+                            className="px-4"
+                          >
+                            Delete
+                          </Button>
+                        </div>
+                      </div>
+                    </DialogContent>
+                  </Dialog>
                 </div>
               </>
             )}

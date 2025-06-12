@@ -122,12 +122,11 @@ export default function useTimebox() {
       if (!preset) {
         return err("Timebox not found");
       }else {
-        // if it's a preset, we can complete it without updating the DB
         setCurrentTimebox(null);
         return ok(true);
       }
     };
-    const updatedTimebox = { ...timebox, isCompleted: true, postBoxReview: postBoxReview};
+    const updatedTimebox = { ...timebox, isCompleted: true, postBoxReview: postBoxReview, isActive: false };
     const response = updateTimeboxById(timeboxId, updatedTimebox);
     if (!response) {
       setTimeboxes((prev) => prev.map((tb) => (tb.id === timeboxId ? { ...tb, isCompleted: false } : tb)));
