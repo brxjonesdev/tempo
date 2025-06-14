@@ -7,7 +7,6 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/shared/compo
 import { Textarea } from "@/shared/components/ui/textarea"
 import { Label } from "@/shared/components/ui/label"
 import { presets } from "./presets";
-import { on } from "events";
 
 type TimerProps = {
   goal: string

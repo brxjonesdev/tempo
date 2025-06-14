@@ -22,10 +22,6 @@ export type Timebox = {
 export default function useTimebox() {
   const [timeboxes, setTimeboxes] = useState<Timebox[]>([]);
   const [currentTimebox, setCurrentTimebox] = useState<Timebox | null>(null);
-  const [status, setStatus] = useState({
-    loading: false,
-    error: null as string | null,
-  })
   useEffect(() => {
   async function loadTimeboxes() {
       const result = await fetchTimeboxes();
