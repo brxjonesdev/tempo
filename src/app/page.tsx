@@ -28,12 +28,12 @@ export default function Home() {
 
   return (
     <main className="flex flex-col items-center p-4 w-full font-body font-medium gap-2 h-full">
-      <div className="max-w-7xl w-full space-y-4 lg:space-y-0 lg:flex gap-3 flex-1 flex-col h-full">
+      <div className="max-w-7xl w-full space-y-4 lg:space-y-0 lg:flex gap-2 flex-1 flex-col h-full mb-4">
         <div className=''>
-          <h2 className=" text-lg lg:text-2xl font-bold tracking-tight text-[#93bdc0]">Tempo</h2>
+          <h2 className=" text-lg lg:text-xl font-bold tracking-tight text-[#93bdc0]">Tempo</h2>
         </div>
 
-        <section className="lg:grid grid-cols-3 gap-4 flex-1 overflow-hidden space-y-6 lg:space-y-0">
+        <section className="lg:grid grid-cols-3 gap-4 flex-1 space-y-6 lg:space-y-0 ">
           <div>
             {currentTimebox ? (
               <Timer

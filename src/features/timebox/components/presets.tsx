@@ -122,7 +122,7 @@ export default function Presets({ onSelect }: { onSelect: (timebox: Timebox) => 
             <CarouselItem key={i} className="pl-4 ">
               <div className="border rounded-xl p-4 bg-[#cceaec] flex flex-col gap-4 h-full">
                 <div>
-                  <h4 className="text-lg font-semibold text-[#50696b]">{preset.title}</h4>
+                  <h4 className="text-md font-semibold text-[#50696b]">{preset.title}</h4>
                   <p className="text-sm text-muted-foreground">{preset.description}</p>
                 </div>
                 <div>

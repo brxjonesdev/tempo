@@ -107,7 +107,7 @@ export default function TimeboxCard({
 
   return (
     <Card className={getCardStyles()} onClick={handleCardClick}>
-      <CardContent className="p-4">
+      <CardContent className="px-4 py-2">
         <div className="space-y-3">
           {/* Header */}
           <div className="flex items-start justify-between gap-3">
@@ -238,7 +238,7 @@ export default function TimeboxCard({
 
           {/* Review Section */}
           {isCompleted && postBoxReview && (
-            <div className="pt-2 border-t border-gray-100">
+            <div className="pt-4 border-t border-gray-100">
               <Dialog>
                 <DialogTrigger asChild>
                   <Button
