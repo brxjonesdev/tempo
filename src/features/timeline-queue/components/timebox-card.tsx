@@ -60,6 +60,7 @@ export default function TimeboxCard({
   }
 
   const handleEdit = (e: React.MouseEvent) => {
+    if (isCompleted) return
     e.stopPropagation()
     setIsEditing(true)
   }
@@ -91,7 +92,7 @@ export default function TimeboxCard({
   }
 
   const getCardStyles = () => {
-    let styles = "group cursor-pointer transition-all duration-200 hover:shadow-md"
+    let styles = "group cursor-pointer transition-all duration-200 hover:shadow-md font-body"
 
     if (isActive) {
       styles += " border-blue-200 bg-blue-50/30"
@@ -149,9 +150,10 @@ export default function TimeboxCard({
                 </div>
               ) : (
                 <div className="opacity-0 group-hover:opacity-100 transition-opacity flex gap-1">
+                  {isCompleted ? null : (
                   <Button size="sm" variant="ghost" onClick={handleEdit} className="h-7 w-7 p-0">
                     <Edit2 className="w-3 h-3" />
-                  </Button>
+                  </Button>)}
                   <Dialog open={showDeleteConfirm} onOpenChange={setShowDeleteConfirm}>
                     <DialogTrigger asChild>
                       <Button
