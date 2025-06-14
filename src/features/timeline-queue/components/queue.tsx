@@ -31,7 +31,14 @@ export default function Queue({
       </CardHeader>
 
       <CardContent className="overflow-y-scroll p-4 space-y-4 flex-1 flex flex-col">
-        {timeboxes.map((timebox, index) => (
+        {timeboxes
+        .sort((a, b) => {
+          // Sort by status
+          if (a.isCompleted && !b.isCompleted) return 1;
+          if (!a.isCompleted && b.isCompleted) return -1;
+          return 0;
+        })
+        .map((timebox, index) => (
           <TimeboxCard
             key={index}
             {...timebox}
