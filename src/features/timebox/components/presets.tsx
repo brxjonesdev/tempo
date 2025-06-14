@@ -8,18 +8,19 @@ import {
   CarouselNext,
   CarouselPrevious,
 } from '@/shared/components/ui/carousel';
-import { Timebox } from '../use-timebox';
+import { Timebox } from '../hooks/use-timeboxes';
 
 type Preset = {
+  id?: string; 
   title: string;
   description: string;
   blurb: string;
   duration: number; // in minutes
 };
 
-export default function Presets({ onSelect }: { onSelect: (timebox: Timebox) => void }) {
-  const presets = [
+export const presets = [
     {
+      id: 'Pomodoro',
       title: 'Pomodoro',
       description: '25 min focus / 5 min break',
       blurb:
@@ -27,6 +28,7 @@ export default function Presets({ onSelect }: { onSelect: (timebox: Timebox) => 
       duration: 25,
     },
     {
+      id: 'Creative Sprint',
       title: 'Creative Sprint',
       description: '60 minutes of uninterrupted creation',
       blurb:
@@ -34,12 +36,14 @@ export default function Presets({ onSelect }: { onSelect: (timebox: Timebox) => 
       duration: 60,
     },
     {
+      id: 'Quick Win',
       title: 'Quick Win',
       description: '15 minutes to overcome inertia',
       blurb: 'Low pressure starter—useful for breaking through procrastination.',
       duration: 15,
     },
     {
+      id: 'Power Hour',
       title: 'Power Hour',
       description: '60 minutes of focused output',
       blurb: 'Use when you want to crush a to-do list or knock out major tasks quickly.',
@@ -52,18 +56,21 @@ export default function Presets({ onSelect }: { onSelect: (timebox: Timebox) => 
       duration: 90,
     },
     {
+      id: 'Recovery Block',
       title: 'Recovery Block',
       description: '30 minutes of rest or recharge',
       blurb: 'Use after deep sessions for recovery—stretch, walk, hydrate.',
       duration: 30,
     },
     {
+      id: 'Admin Sprint',
       title: 'Admin Sprint',
       description: '45 minutes for shallow tasks',
       blurb: 'Handle emails, errands, and logistical work without dragging your day.',
       duration: 45,
     },
     {
+      id: 'Zen Mode',
       title: 'Zen Mode',
       description: '20 minutes of quiet reflection or meditation',
       blurb:
@@ -71,12 +78,14 @@ export default function Presets({ onSelect }: { onSelect: (timebox: Timebox) => 
       duration: 20,
     },
     {
+      id: 'Study Block',
       title: 'Study Block',
       description: '50 minutes of learning / 10 min break',
       blurb: 'Structured to absorb knowledge efficiently without fatigue.',
       duration: 50,
     },
     {
+      id: 'Evening Wind-down',
       title: 'Evening Wind-down',
       description: '20 minutes of screen-free decompression',
       blurb: 'Perfect for journaling, reading, or calming your mind before sleep.',
@@ -84,15 +93,17 @@ export default function Presets({ onSelect }: { onSelect: (timebox: Timebox) => 
     },
   ];
 
+export default function Presets({ onSelect }: { onSelect: (timebox: Timebox) => void }) {
+  
+
   function handlePresetSelect(preset: Preset) {
     // convert preset to Timebox format
     const presetTimebox: Timebox = {
-      id: (Math.random() * 10000).toString(), // simple random ID for demo
+      id: preset.id as string,
       goal: preset.title,
-      duration: preset.duration * 60, // convert minutes to seconds
-      completionDate: null,
-      priority: 3, // default priority
-      isActive: true, // set as active for demo
+      duration: preset.duration * 60,
+      isCompleted: false, // default to not completed
+      isActive: true,
     };
 
     onSelect(presetTimebox);
@@ -111,7 +122,7 @@ export default function Presets({ onSelect }: { onSelect: (timebox: Timebox) => 
             <CarouselItem key={i} className="pl-4 ">
               <div className="border rounded-xl p-4 bg-[#cceaec] flex flex-col gap-4 h-full">
                 <div>
-                  <h4 className="text-lg font-semibold text-[#50696b]">{preset.title}</h4>
+                  <h4 className="text-md font-semibold text-[#50696b]">{preset.title}</h4>
                   <p className="text-sm text-muted-foreground">{preset.description}</p>
                 </div>
                 <div>
@@ -130,7 +141,6 @@ export default function Presets({ onSelect }: { onSelect: (timebox: Timebox) => 
           ))}
         </CarouselContent>
 
-        {/* Hidden native controls for programmatic access */}
         <div className="hidden">
           <CarouselPrevious data-carousel-prev />
           <CarouselNext data-carousel-next />

@@ -2,7 +2,7 @@
 
 import Queue from '@/features/timeline-queue/components/queue';
 import Timer from '@/features/timebox/components/timebox-timer';
-import useTimebox from '@/features/timebox/use-timebox';
+import useTimebox, { Timebox } from '@/features/timebox/hooks/use-timeboxes';
 import {
   Card,
   CardHeader,
@@ -18,27 +18,29 @@ export default function Home() {
   const {
     currentTimebox,
     timeboxes,
-    startTimebox,
-    timeboxControls,
-    scheduleTimebox,
-    setCurrentTimebox,
+    completeTimebox,
+    reset,
+    selectTimebox,
+    persistTimebox,
+    updateTimeboxById,
+    deleteTimebox
   } = useTimebox();
 
   return (
-    <main className="bg-[#d6fcff] flex flex-col items-center p-4 w-full font-body font-medium gap-2 h-full">
-      <div className="max-w-7xl w-full space-y-4 lg:space-y-0 lg:flex gap-3 flex-1 flex-col h-full">
-        <div>
-          <h2 className="text-2xl font-bold tracking-tight text-[#93bdc0]">Tempo</h2>
+    <main className="flex flex-col items-center p-4 w-full font-body font-medium gap-2 h-full">
+      <div className="max-w-7xl w-full space-y-4 lg:space-y-0 lg:flex gap-2 flex-1 flex-col h-full mb-4">
+        <div className=''>
+          <h2 className=" text-lg lg:text-xl font-bold tracking-tight text-[#93bdc0]">Tempo</h2>
         </div>
 
-        <section className="lg:grid grid-cols-3 gap-4 flex-1 overflow-hidden space-y-6 lg:space-y-0">
+        <section className="lg:grid grid-cols-3 gap-4 flex-1 space-y-6 lg:space-y-0 ">
           <div>
             {currentTimebox ? (
               <Timer
                 goal={currentTimebox.goal}
                 duration={currentTimebox.duration}
-                onComplete={() => timeboxControls('complete')}
-                onReset={() => timeboxControls('reset')}
+                onComplete={(postBoxReview?: string) => completeTimebox(currentTimebox.id, postBoxReview)}
+                onReset={() => reset()}
               />
             ) : (
               <Card className="flex flex-col flex-1 bg-white/70 overflow-hidden">
@@ -49,21 +51,19 @@ export default function Home() {
                   </CardDescription>
                 </CardHeader>
                 <CardContent className="flex flex-col flex-1 overflow-y-auto">
-                  <Presets onSelect={startTimebox} />
+                  <Presets onSelect={selectTimebox} />
                   <Separator className="my-6" />
                   <CreateTimeblock
-                    onQuickStart={(goal: string, duration: number) => {
-                      startTimebox({
-                        id: Date.now().toString(),
-                        goal,
-                        duration,
-                        completionDate: null,
-                        priority: 3,
-                        isActive: false,
-                      });
+                    onQuickStart={async (goal: string, duration: number) => {
+                      const result = await persistTimebox(goal, duration);
+                      if (!result.ok) {
+                        alert(result.error);
+                      } else {
+                        selectTimebox(result.data);
+                      }                      
                     }}
                     onSchedule={(goal, duration) => {
-                      scheduleTimebox(goal, duration);
+                      persistTimebox(goal, duration);
                     }}
                   />
                 </CardContent>
@@ -71,9 +71,22 @@ export default function Home() {
             )}
           </div>
           <div className="flex flex-col flex-1 min-h-0 col-span-2">
-            <Queue
-              timeboxes={timeboxes}
-              onSelectTimebox={setCurrentTimebox}
+            <Queue 
+            timeboxes={timeboxes} 
+            onSelectTimebox={selectTimebox}
+            onDeleteTimebox={(timeboxId: string) => {
+              const response = deleteTimebox(timeboxId);
+              if (!response) {
+                alert("Failed to delete timebox");
+              }
+
+            }}
+            onUpdateTimebox ={(updatedTimebox: Partial<Timebox>) => {
+              const response = updateTimeboxById(updatedTimebox.id as string, updatedTimebox);
+              if (!response) {
+                alert("Failed to update timebox");
+              }
+            }}
             />
           </div>
         </section>

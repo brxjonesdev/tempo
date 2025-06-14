@@ -25,7 +25,7 @@ export default function RootLayout({
   return (
     <html lang="en" className="h-full">
       <body
-        className={`${quicksand.variable} ${workSans.variable} antialiased lg:h-screen`}
+        className={`${quicksand.variable} ${workSans.variable} antialiased h-dvh bg-[#d6fcff]`}
       >
         {children}
       </body>
