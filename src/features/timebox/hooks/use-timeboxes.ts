@@ -146,6 +146,5 @@ export default function useTimebox() {
     timeboxes,
     updateTimeboxById,
     deleteTimebox,
-    status,
   };
 }
