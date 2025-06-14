@@ -17,7 +17,6 @@ ritual for getting into flow.
 - React + Next.js
 - Tailwind CSS
 - Dexie.js (IndexedDB)
-- Framer Motion
 
 ## 🚧 Status
 
@@ -32,11 +31,3 @@ npm install
 npm run dev
 ```
 
-## 🗃 Data
-
-All data is stored in your browser using IndexedDB via Dexie. No servers, no sync—your
-data stays on your device.
-
----
-
-PRs welcome. Ideas too.
